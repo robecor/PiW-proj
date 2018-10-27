@@ -15,7 +15,15 @@ wsConnection.onopen = function (event) {
 
     switch (messageObject.action) {
       case "user.list":
-        console.log(messageObject.data.users);
+        DomManipulator.hideLoader();
+        DomManipulator.setUserInBox(messageObject.data.users);
+        break;
+      case "user.connected":
+        DomManipulator.addUserInBox(messageObject.data.user);
+        break;
+      case "user.disconnected":
+        DomManipulator.removeUserFromBox(messageObject.data.userId);
+        break;
     }
   }
 };
@@ -27,6 +35,7 @@ function setUserName() {
   //Check if the connection is open
   if (wsOpen) {
     DomManipulator.showLoader();
+    DomManipulator.hideNameUnput();
     wsConnection.send(Parser.convertJsonMessage({
       action: "user.setName",
       data: {

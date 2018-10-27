@@ -67,8 +67,14 @@ const connectionMethods = {
     }
   },
 
-  sendMessageToAllUsers(message) {
-    users.forEach((user) => {
+  sendMessageToAllUsers(userId, message) {
+    let toSendUsers = users;
+
+    if (userId) {
+      toSendUsers = toSendUsers.filter(user => user._id !== userId);
+    }
+
+    toSendUsers.forEach((user) => {
       user.ws.send(message);
     });
   }

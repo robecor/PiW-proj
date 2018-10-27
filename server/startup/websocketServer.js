@@ -50,7 +50,7 @@ function startWebsocket(server) {
 
 
               //Notify connected users that someone connected
-              userConnections.sendMessageToAllUsers(jsonParser.convertJsonMessage({
+              userConnections.sendMessageToAllUsers(userId, jsonParser.convertJsonMessage({
                 action: "user.connected",
                 data: {
                   user: {
@@ -69,7 +69,7 @@ function startWebsocket(server) {
 
 
       //Notify all users that someone has disconnected
-      userConnections.sendMessageToAllUsers(jsonParser.convertJsonMessage({
+      userConnections.sendMessageToAllUsers(userId, jsonParser.convertJsonMessage({
         action: "user.disconnected",
         data: {
           userId: userId
