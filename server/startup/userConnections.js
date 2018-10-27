@@ -21,12 +21,56 @@ const connectionMethods = {
     return users.find(user => user._id === _id)
   },
 
-  setUserName(name) {
-    const user = users.find(user => user._id === _id);
+  setUserName(userId, name) {
+    const user = users.find(user => user._id === userId);
 
     if (user) {
       user.setName(name);
     }
+  },
+
+  getUsers() {
+    return users;
+  },
+
+  getUserWithName(userId) {
+    const resultUser = users.find(user => user._id === userId);
+
+    if (resultUser) {
+      return {
+        _id: resultUser._id,
+        name: resultUser.name,
+      };
+    } else {
+      return null;
+    }
+  },
+
+  getConnectedUsersWithName() {
+    const usersWithName = users.filter((user) => {
+      return !user.name;
+    });
+
+    return usersWithName.map((user) => {
+      return {
+        _id: user._id,
+        name: user.name
+      };
+    });
+  },
+
+  sendMessageToUser(userId, message) {
+    const user = users.find(user => user._id === userId);
+
+    if (user) {
+      user.ws.send(message);
+    }
+  },
+
+  sendMessageToAllUsers(message) {
+    users.forEach((user) => {
+      user.ws.send(message);
+    });
   }
 };
 
