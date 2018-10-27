@@ -178,6 +178,34 @@
 
 #main-app-container {
     z-index: 10;
+    display: flex;
+    padding: 30px 60px;
+}
+
+#main-app-container.hidden {
+    display: none;
+}
+
+.user-list-container {
+    flex: 0 0 50%;
+}
+
+.users-container {
+    padding: 20px 30px;
+    border: 2px solid #00a7e2;
+    height: 500px;
+}
+
+.user-list {
+    list-style: none;
+    padding: 0;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+}
+
+.user-list-element {
+    border-bottom: 1px dashed #00a7e2;
 }
 
 @keyframes loading-animation {

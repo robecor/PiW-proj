@@ -16,6 +16,7 @@ wsConnection.onopen = function (event) {
     switch (messageObject.action) {
       case "user.list":
         DomManipulator.hideLoader();
+        DomManipulator.showMainApp();
         DomManipulator.setUserInBox(messageObject.data.users);
         break;
       case "user.connected":
