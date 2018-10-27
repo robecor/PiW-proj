@@ -1,5 +1,6 @@
 const loadingContainer = document.getElementById("loading-container");
 const nameInputContainer = document.getElementById("name-input-container");
+const nameInput = document.getElementById("user-name-input");
 
 class DomManipulator {
   static hideLoader() {
@@ -16,5 +17,9 @@ class DomManipulator {
 
   static hideNameUnput() {
     nameInputContainer.classList.add("hidden");
+  }
+
+  static getNameInputValue() {
+    return nameInput.value;
   }
 }

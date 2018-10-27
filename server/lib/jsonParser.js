@@ -14,7 +14,7 @@ function parseJsonMessage (string) {
   let result = null;
 
   try {
-    result =JSON.parse(string);
+    result = JSON.parse(string);
   } catch (err) {
     console.error(err);
   }

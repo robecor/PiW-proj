@@ -48,7 +48,7 @@ const connectionMethods = {
 
   getConnectedUsersWithName() {
     const usersWithName = users.filter((user) => {
-      return !user.name;
+      return user.name;
     });
 
     return usersWithName.map((user) => {

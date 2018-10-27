@@ -15,7 +15,7 @@ function startWebsocket(server) {
     connection.on('message', function (message) {
       if (message.type === 'utf8') {
         //Parse the message string into an object
-        const messageObject = jsonParser.parseJsonMessage(message);
+        const messageObject = jsonParser.parseJsonMessage(message.utf8Data);
 
         if (messageObject) {
           //Process the message based on the action
@@ -43,7 +43,21 @@ function startWebsocket(server) {
               //Send to the connected user a list with all the other users
               userConnections.sendMessageToUser(userId, jsonParser.convertJsonMessage({
                 action: "user.list",
-                data: userConnections.getConnectedUsersWithName()
+                data: {
+                  users: userConnections.getConnectedUsersWithName()
+                }
+              }));
+
+
+              //Notify connected users that someone connected
+              userConnections.sendMessageToAllUsers(jsonParser.convertJsonMessage({
+                action: "user.connected",
+                data: {
+                  user: {
+                    _id: userId,
+                    name: name
+                  }
+                }
               }));
           }
         }
