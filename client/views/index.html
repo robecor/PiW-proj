@@ -9,23 +9,35 @@
   <title>PiW</title>
 </head>
 <body>
-  <div id="app">
-    <div class="container">
-      <div id="loading-container">
-        <div class="loading-box">
-          <div class="loading-element-container">
-            <div class="loading-element"></div>
-            <div class="loading-element"></div>
-            <div class="loading-element"></div>
-            <div class="loading-element"></div>
-            <div class="loading-element"></div>
-            <div class="loading-element"></div>
-          </div>
+<div id="app">
+  <div class="container">
+    <div id="loading-container">
+      <div class="loading-box">
+        <div class="loading-element-container">
+          <div class="loading-element"></div>
+          <div class="loading-element"></div>
+          <div class="loading-element"></div>
+          <div class="loading-element"></div>
+          <div class="loading-element"></div>
+          <div class="loading-element"></div>
         </div>
       </div>
     </div>
+
+    <div id="name-input-container" class="hidden">
+      <div class="name-input-box">
+        <form action="javascript:setUserName();">
+          <input type="text" placeholder="Name" class="name-input" id="user-name-input">
+          <div class="name-label-cont">
+            <label class="name-input-label" for="user-name-input">Set a name</label>
+          </div>
+          <button class="user-name-button">Set</button>
+        </form>
+      </div>
+    </div>
   </div>
-  <script src="./index.js"></script>
-  <script src="./domManipulation.js"></script>
+</div>
+<script src="./index.js"></script>
+<script src="./domManipulation.js"></script>
 </body>
 </html>
