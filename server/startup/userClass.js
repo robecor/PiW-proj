@@ -6,7 +6,7 @@ class User {
     this.ws = ws;
   }
 
-  addName(name) {
+  setName(name) {
     this.name = name;
   }
 }
