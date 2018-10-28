@@ -261,10 +261,29 @@
     padding: 20px 0;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .user-chat-action {
     flex: 0 0 auto;
+}
+
+@media only screen and (max-width: 1035px) {
+    #main-app-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .user-list-container {
+        flex: 0 0 auto;
+        margin: 20px 0;
+        width: 80%;
+    }
+
+    .chat-container {
+        flex: 0 0 auto;
+        width: 80%;
+    }
 }
 
 @keyframes loading-animation {
