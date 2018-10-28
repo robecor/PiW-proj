@@ -10,7 +10,7 @@ const DomEvents = {
 
 userListBox.addEventListener("click", function (event) {
   const target = event.target;
-  const userId = target.getAttribute("data-user-id")
+  const userId = target.getAttribute("data-user-id");
 
   DomEvents.onUserClickCallback(userId);
 });

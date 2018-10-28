@@ -3,6 +3,7 @@ const nameInputContainer = document.getElementById("name-input-container");
 const nameInput = document.getElementById("user-name-input");
 const mainAppContainer = document.getElementById("main-app-container");
 const userListBox = document.getElementById("user-list-box");
+const chatWaitingBox = document.getElementById("chat-waiting-container");
 // const userElements = [];
 
 //Testing purpose
@@ -38,6 +39,14 @@ class DomManipulator {
 
   static hideMainApp() {
     mainAppContainer.classList.add("hidden");
+  }
+
+  static showWaitingBox() {
+    chatWaitingBox.classList.remove("hidden");
+  }
+
+  static hideWaitingBox() {
+    chatWaitingBox.classList.add("hidden");
   }
 
   static getNameInputValue() {

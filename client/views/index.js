@@ -49,4 +49,5 @@ function setUserName() {
 
 DomEvents.onUserClick(function (userId) {
   DomManipulator.selectUserElement(userId);
+  DomManipulator.hideWaitingBox();
 });
