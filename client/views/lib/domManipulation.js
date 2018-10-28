@@ -3,6 +3,7 @@ const nameInputContainer = document.getElementById("name-input-container");
 const nameInput = document.getElementById("user-name-input");
 const mainAppContainer = document.getElementById("main-app-container");
 const userListBox = document.getElementById("user-list-box");
+const userChatContainer = document.getElementById("user-chat-container");
 const chatWaitingBox = document.getElementById("chat-waiting-container");
 // const userElements = [];
 
@@ -92,6 +93,8 @@ class DomManipulator {
       } else if (userElement.classList.contains("selected")) {
         userElement.classList.remove("selected");
       }
-    })
+    });
+
+    userChatContainer.scrollIntoView();
   }
 }
