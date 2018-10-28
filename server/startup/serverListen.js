@@ -1,7 +1,7 @@
 const express = require('express');
 const http = require("http");
 const path = require("path");
-const { startWebsocket } = require("./websocketServer.js");
+const {startWebsocket} = require("./websocketServer.js");
 
 const app = express();
 const server = http.createServer(app);
@@ -10,7 +10,7 @@ const server = http.createServer(app);
 const absolutePath = `${__dirname}/../../`;
 const viewPath = `${absolutePath}/client/views`;
 
-server.listen(3005, function() {
+server.listen(3005, function () {
   console.log("Started the websocket server at 3005");
 
   //Start the websocket server
@@ -21,6 +21,13 @@ app.use(express.static(viewPath));
 
 app.get("/", function (req, res) {
   res.sendFile(path.join(`${viewPath}/index.html`));
+});
+app.get("/docs", function (req, res) {
+  res.set({
+    'Content-Type': 'text/html'
+  })
+
+  res.sendFile(path.join(`${viewPath}/docs.html`));
 });
 
 app.listen(3000, function () {

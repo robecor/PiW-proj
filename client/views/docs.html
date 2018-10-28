@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Docs</title>
+</head>
+<body>
+  <header>
+    <h1>Technical report</h1>
+  </header>
+
+  <div role="contentinfo">
+    <section typeof="sa:AuthorsList">
+      <h2>Authors</h2>
+      <ul>
+        <li typeof="sa:ContributorRole" property="schema:author">
+          <span typeof="schema:Person" resource="https://github.com/robecor">
+            <meta property="schema:givenName" content="Robert">
+            <meta property="schema:additionalName" content="Cozmin">
+            <meta property="schema:familyName" content="Corolea">
+            <span property="schema:name">Corolea Robert-Cozmin</span>
+          </span>
+          <ul>
+            <li property="schema:roleContactPoint" typeof="schema:ContactPoint">
+              <a href="mailto:robert.corolea@cultofcoders.com" property="schema:email">
+                robert.corolea@cultofcoders.com
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+    <section>
+      <h1>Content</h1>
+      <ol>
+        <li>
+          <a href="#introduction-section">Introduction</a>
+        </li>
+        <li>
+          <a href="#ideas-concepts-section">Ideas and concepts</a>
+        </li>
+        <li>
+          <a href="#methods-section">Ways of using the management system</a>
+        </li>
+      </ol>
+    </section>
+  </div>
+
+  <section id="introduction-section" role="doc-introduction">
+    <h1>Introduction</h1>
+    <p>
+      In this report I will discuss the the technical side of the application and will focus on the following:
+      <ul>
+        <li>Ideas and concepts regarding overall design;</li>
+        <li>The methods for user interaction;</li>
+        <li>The ways in which the management system can be used.</li>
+      </ul>
+    </p>
+  </section>
+
+  <section id="ideas-concepts-section">
+    <h1>Ideas and concepts</h1>
+    <p>
+      The main idea for the application is a network that users can access and exchange information(text, files, videos,
+      etc...) in a peer-to-peer manor.
+      The users accesses the app, enters a name and its presented with a list of other users that he can interact with.
+      Once someone is chosen the other user will receive a confirmation for the connection and if he chooses to confirm
+      a p2p connection will be established between the 2 people.
+      The information transfer will be done in a chat format. The ui will show a text input, a file input and a button
+      labeled <b>Video</b>
+      <br>
+      <br>
+      Normal text can be exchanged using the text input and the file variant will be used to send files.
+      Pressing the <b>Video</b> button will trigger the browser to ask for video and microphone permission (if the
+      settings are not saved) and with the confirmation of these two a video element will appear for both users, showing
+      the live feed of the one who pressed the button.
+      <br>
+      <br>
+      I've chosen to use the chat format because that is a very common for information exchange between end users
+      and it is a very good way of displaying the peer to peer technology.
+    </p>
+  </section>
+
+  <section id="methods-section">
+    <h1>Methods for user interaction</h1>
+    <p>
+      When first entering the app the user will be presented with a input form for name selection. This is represented
+      by a simple form with one input where the name is typed and a button for confirmation. The confirmation can also be
+      done with the enter key.
+      <br>
+      <br>
+      After a name has been chosen a list with the currently connected users will be displayed. Any of the displayed
+      people can be selected and in doing so it will establish a connection and open the chat box.
+      Every time a new connection is established the previous one is closed.
+      <br>
+      <br>
+      Upon opening the chat box the user has multiple means of sending information to the connected peer:
+      <ol>
+        <li>The first one is the normal text input where text can be type and sent using the enter key;</li>
+        <li>The second one is a file input for sending files;</li>
+        <li>The last methods of communication is the video button that will open a live video feed of the user for both parties.</li>
+      </ol>
+    </p>
+  </section>
+
+  <section id="management-section">
+    <h1>Ways of using the management system</h1>
+    <p>
+      For source code management and versioning I'm using Github. For new features to the app I create a new branch and
+      work on multiple steps with a commit between each one.
+      For app fixed and small changes it depends on how much is estimated. When the work is small one branch is used
+      with multiple commits for each fix and when the estimated work is bigger I work with only one branch and small
+      steps with commits in between until the issue is fixed.
+      At the end the branch is pushed to the server, a pull request is created and after checking if everything is in
+      order I merge it into master.
+    </p>
+  </section>
+</body>
+</html>
