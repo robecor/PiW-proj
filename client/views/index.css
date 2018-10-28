@@ -202,10 +202,25 @@
     overflow: auto;
     height: 100%;
     width: 100%;
+    pointer-events: none;
 }
 
 .user-list-element {
     border-bottom: 1px dashed #00a7e2;
+    margin: 10px 0;
+    cursor: pointer;
+    pointer-events:all;
+}
+
+.user-list-element.selected {
+    cursor: default;
+    pointer-events: none;
+    background-color: #ced8f4;
+}
+
+.user-list-div {
+    padding: 10px 20px;
+    pointer-events: none;
 }
 
 @keyframes loading-animation {
