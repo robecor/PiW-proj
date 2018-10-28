@@ -6,7 +6,8 @@ let wsOpen = false;
 wsConnection.onopen = function (event) {
   //When open hide the loader and show the name input
   DomManipulator.hideLoader();
-  DomManipulator.showNameUnput();
+  // DomManipulator.showNameUnput();
+  DomManipulator.showMainApp();
   wsOpen = true;
 
   //Event for when we get a message from the server
@@ -45,3 +46,8 @@ function setUserName() {
     }));
   }
 }
+
+DomEvents.onUserClick(function (userId) {
+  DomManipulator.selectUserElement(userId);
+  DomManipulator.hideWaitingBox();
+});

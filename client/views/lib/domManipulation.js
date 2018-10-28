@@ -3,7 +3,19 @@ const nameInputContainer = document.getElementById("name-input-container");
 const nameInput = document.getElementById("user-name-input");
 const mainAppContainer = document.getElementById("main-app-container");
 const userListBox = document.getElementById("user-list-box");
-const userElements = [];
+const userChatContainer = document.getElementById("user-chat-container");
+const chatWaitingBox = document.getElementById("chat-waiting-container");
+// const userElements = [];
+
+//Testing purpose
+const userElements = [
+  document.getElementById("el1"),
+  document.getElementById("el2"),
+  document.getElementById("el3"),
+  document.getElementById("el4"),
+  document.getElementById("el5"),
+  document.getElementById("el6"),
+];
 
 class DomManipulator {
   static hideLoader() {
@@ -28,6 +40,14 @@ class DomManipulator {
 
   static hideMainApp() {
     mainAppContainer.classList.add("hidden");
+  }
+
+  static showWaitingBox() {
+    chatWaitingBox.classList.remove("hidden");
+  }
+
+  static hideWaitingBox() {
+    chatWaitingBox.classList.add("hidden");
   }
 
   static getNameInputValue() {
@@ -62,5 +82,19 @@ class DomManipulator {
     if (userListElement) {
       userListBox.removeChild(userListElement);
     }
+  }
+
+  static selectUserElement(userId) {
+    userElements.forEach((userElement) => {
+      const userElementId = userElement.getAttribute("data-user-id");
+
+      if (userId === userElementId) {
+        userElement.classList.add("selected");
+      } else if (userElement.classList.contains("selected")) {
+        userElement.classList.remove("selected");
+      }
+    });
+
+    userChatContainer.scrollIntoView();
   }
 }
