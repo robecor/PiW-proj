@@ -1,7 +1,8 @@
 const userConnections = [];
 
 const peerConnectionHandler = {
-  createNewConnection({userId, description}) {
+  createNewConnection({userId, description, createOffer}) {
+    const self = this;
     const existingConnection = this.getUserConnection(userId);
 
     if (existingConnection) {
@@ -10,17 +11,18 @@ const peerConnectionHandler = {
 
     const peerConnection = new Piw({
       userId,
+      createOffer,
       onIceCandidate(candidate) {
-        this.onIceCandidate(userId, candidate);
+        self.onIceCandidate(userId, candidate);
       },
       onIceConnectionStateChange(state) {
-        this.onIceConnectionStateChange(userId, state);
+        self.onIceConnectionStateChange(userId, state);
       },
       onOfferCreation(desc) {
-        this.onSdpOffer(userId, desc);
+        self.onSdpOffer(userId, desc);
       },
       onAnswerCreation(desc) {
-        this.onSdpAnswer(userId, desc);
+        self.onSdpAnswer(userId, desc);
       }
     });
 

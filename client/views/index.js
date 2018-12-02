@@ -4,7 +4,7 @@ let wsOpen = false;
 
 //Event for when the connection is open
 wsConnection.onopen = function (event) {
-  //When open hide the loader and show the name input
+  //When the connection is open hide the loader and show the name input
   DomManipulator.hideLoader();
   DomManipulator.showNameUnput();
   // DomManipulator.showMainApp();
@@ -29,7 +29,8 @@ wsConnection.onopen = function (event) {
       case "user.sdpOffer":
         const newConnection = peerConnectionHandler.createNewConnection({
           userId: messageObject.data.userId,
-          description: messageObject.data.description
+          description: messageObject.data.description,
+          createOffer: false
         });
         break;
       case "user.sdpAnswer":
@@ -45,7 +46,37 @@ wsConnection.onopen = function (event) {
         });
         break;
     }
-  }
+  };
+
+  peerConnectionHandler.onIceCandidate = function (userId, candidate) {
+    wsConnection.send(Parser.convertJsonMessage({
+      action: "user.iceCandidate",
+      data: {
+        userId,
+        candidate
+      }
+    }));
+  };
+
+  peerConnectionHandler.onSdpOffer = function (userId, description) {
+    wsConnection.send(Parser.convertJsonMessage({
+      action: "user.sdpOffer",
+      data: {
+        userId,
+        description
+      }
+    }));
+  };
+
+  peerConnectionHandler.onSdpAnswer = function (userId, description) {
+    wsConnection.send(Parser.convertJsonMessage({
+      action: "user.sdpAnswer",
+      data: {
+        userId,
+        description
+      }
+    }));
+  };
 };
 
 //Function for the name set form
@@ -68,4 +99,10 @@ function setUserName() {
 DomEvents.onUserClick(function (userId) {
   DomManipulator.selectUserElement(userId);
   DomManipulator.hideWaitingBox();
+
+  const newConnection = peerConnectionHandler.createNewConnection({
+    userId: userId,
+    createOffer: true
+  });
+  console.log(newConnection);
 });
