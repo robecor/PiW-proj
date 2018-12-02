@@ -59,6 +59,49 @@ function startWebsocket(server) {
                   }
                 }
               }));
+              break;
+
+            case "user.sdpOffer":
+              const targetUserId = messageObject.data.userId;
+              const description = messageObject.data.description;
+
+              //Send sdp offer
+              userConnections.sendMessageToUser(targetUserId, jsonParser.convertJsonMessage({
+                action: "user.sdpOffer",
+                data: {
+                  userId: userId,
+                  description
+                }
+              }));
+              break;
+
+            case "user.sdpAnswer":
+              const targetUserId = messageObject.data.userId;
+              const description = messageObject.data.description;
+
+              //Send the sdp answer
+              userConnections.sendMessageToUser(targetUserId, jsonParser.convertJsonMessage({
+                action: "user.sdpAnswer",
+                data: {
+                  userId: userId,
+                  description
+                }
+              }));
+              break;
+
+            case "user.iceCandidate":
+              const targetUserId = messageObject.data.userId;
+              const candidate = messageObject.data.candidate;
+
+              //Send ICE candidate
+              userConnections.sendMessageToUser(targetUserId, jsonParser.convertJsonMessage({
+                action: "user.iceCandidate",
+                data: {
+                  userId: userId,
+                  candidate
+                }
+              }));
+              break;
           }
         }
       }
