@@ -1,6 +1,7 @@
 //The websocket connection
 const wsConnection = new WebSocket("ws://127.0.0.1:3005");
 let wsOpen = false;
+let selectedUserId = null;
 
 //Event for when the connection is open
 wsConnection.onopen = function (event) {
@@ -96,6 +97,10 @@ function setUserName() {
   }
 }
 
+function onInputKey(event) {
+  console.log(event);
+}
+
 DomEvents.onUserClick(function (userId) {
   DomManipulator.selectUserElement(userId);
   DomManipulator.hideWaitingBox();
@@ -104,5 +109,12 @@ DomEvents.onUserClick(function (userId) {
     userId: userId,
     createOffer: true
   });
-  console.log(newConnection);
+
+  selectedUserId = userId;
+});
+
+DomEvents.onInputEnterKey(function () {
+  const text = DomManipulator.getInputText();
+  peerConnectionHandler.userSendMessage(selectedUserId, text);
+  DomManipulator.clearChatInput();
 });

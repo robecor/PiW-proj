@@ -1,9 +1,16 @@
 const DomEvents = {
   onUserClickCallback: function(){},
+  onInputEnterKeyCallback: function(){},
 
   onUserClick(callback) {
     if (callback && typeof callback === "function") {
       this.onUserClickCallback = callback;
+    }
+  },
+
+  onInputEnterKey(callback) {
+    if (callback && typeof callback === "function") {
+      this.onInputEnterKeyCallback = callback;
     }
   }
 };
@@ -13,4 +20,10 @@ userListBox.addEventListener("click", function (event) {
   const userId = target.getAttribute("data-user-id");
 
   DomEvents.onUserClickCallback(userId);
+});
+
+textInput.addEventListener("keyup", function(event) {
+  if (event.which === 13) {
+    DomEvents.onInputEnterKeyCallback();
+  }
 });

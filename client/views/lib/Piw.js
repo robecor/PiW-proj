@@ -1,5 +1,6 @@
 class Piw {
   constructor(options) {
+    const self = this;
     this.userId = options.userId;
     this.isConnecting = false;
     this.isConnected = false;
@@ -15,7 +16,7 @@ class Piw {
     this.peerConnection = new RTCPeerConnection(this.peerServerConfig);
     this.peerConnection.addEventListener("icecandidate", (event) => {
       if (!event.candidate) {
-        this.isConnected = true;
+        self.isConnected = true;
         return;
       }
       console.log(`Generated candidate for ${this.userId}:\n`, event.candidate);
@@ -24,6 +25,12 @@ class Piw {
     this.peerConnection.addEventListener("iceconnectionstatechange", options.onIceConnectionStateChange);
 
     if (options.createOffer) {
+      console.log(1);
+      this.dataChannel = this.peerConnection.createDataChannel("dataChannel");
+      console.log(this.dataChannel);
+
+      this.dataChannel.onmessage = self.onChannelMessage;
+
       this.peerConnection.createOffer(
         {
           mandatory: {
@@ -40,6 +47,14 @@ class Piw {
       }).catch((err) => {
         console.log(err);
       });
+    } else {
+      console.log(2);
+      this.peerConnection.ondatachannel = function (event) {
+        this.dataChannel = event.channel;
+        console.log(this.dataChannel);
+
+        this.dataChannel.onmessage = self.onChannelMessage;
+      }
     }
 
     this.onAnswerCreation = options.onAnswerCreation;
@@ -80,5 +95,16 @@ class Piw {
       }).catch((error) => {
       console.log("Error adding candidate");
     });
+  }
+
+  onChannelMessage(event) {
+    console.log(event.data);
+  }
+
+  sendChannelMessage(message) {
+    console.log(this.dataChannel);
+    if (this.dataChannel) {
+      this.dataChannel.send(message);
+    }
   }
 }

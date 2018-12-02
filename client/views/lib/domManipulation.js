@@ -5,6 +5,7 @@ const mainAppContainer = document.getElementById("main-app-container");
 const userListBox = document.getElementById("user-list-box");
 const userChatContainer = document.getElementById("user-chat-container");
 const chatWaitingBox = document.getElementById("chat-waiting-container");
+const textInput = document.getElementById("text-message-input");
 const userElements = [];
 
 //Testing purpose
@@ -96,5 +97,13 @@ class DomManipulator {
     });
 
     userChatContainer.scrollIntoView();
+  }
+
+  static getInputText() {
+    return textInput.value;
+  }
+
+  static clearChatInput() {
+    textInput.value = "";
   }
 }

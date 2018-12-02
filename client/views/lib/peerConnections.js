@@ -62,6 +62,14 @@ const peerConnectionHandler = {
     return userConnections.find(connection => connection.userId === userId);
   },
 
+  userSendMessage(userId, message) {
+    const connection = this.getUserConnection(userId);
+
+    if (connection) {
+      connection.sendChannelMessage(message);
+    }
+  },
+
   onIceCandidate(userId, candidate) {
 
   },
