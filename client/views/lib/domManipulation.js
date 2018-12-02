@@ -5,17 +5,18 @@ const mainAppContainer = document.getElementById("main-app-container");
 const userListBox = document.getElementById("user-list-box");
 const userChatContainer = document.getElementById("user-chat-container");
 const chatWaitingBox = document.getElementById("chat-waiting-container");
-// const userElements = [];
+const textInput = document.getElementById("text-message-input");
+const userElements = [];
 
 //Testing purpose
-const userElements = [
-  document.getElementById("el1"),
-  document.getElementById("el2"),
-  document.getElementById("el3"),
-  document.getElementById("el4"),
-  document.getElementById("el5"),
-  document.getElementById("el6"),
-];
+// const userElements = [
+//   document.getElementById("el1"),
+//   document.getElementById("el2"),
+//   document.getElementById("el3"),
+//   document.getElementById("el4"),
+//   document.getElementById("el5"),
+//   document.getElementById("el6"),
+// ];
 
 class DomManipulator {
   static hideLoader() {
@@ -96,5 +97,13 @@ class DomManipulator {
     });
 
     userChatContainer.scrollIntoView();
+  }
+
+  static getInputText() {
+    return textInput.value;
+  }
+
+  static clearChatInput() {
+    textInput.value = "";
   }
 }

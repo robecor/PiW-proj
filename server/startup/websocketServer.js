@@ -44,10 +44,9 @@ function startWebsocket(server) {
               userConnections.sendMessageToUser(userId, jsonParser.convertJsonMessage({
                 action: "user.list",
                 data: {
-                  users: userConnections.getConnectedUsersWithName()
+                  users: userConnections.getConnectedUsersWithName(userId)
                 }
               }));
-
 
               //Notify connected users that someone connected
               userConnections.sendMessageToAllUsers(userId, jsonParser.convertJsonMessage({
@@ -59,6 +58,40 @@ function startWebsocket(server) {
                   }
                 }
               }));
+              break;
+
+            case "user.sdpOffer":
+              //Send sdp offer
+              userConnections.sendMessageToUser(messageObject.data.userId, jsonParser.convertJsonMessage({
+                action: "user.sdpOffer",
+                data: {
+                  userId: userId,
+                  description: messageObject.data.description
+                }
+              }));
+              break;
+
+            case "user.sdpAnswer":
+              //Send the sdp answer
+              userConnections.sendMessageToUser(messageObject.data.userId, jsonParser.convertJsonMessage({
+                action: "user.sdpAnswer",
+                data: {
+                  userId: userId,
+                  description: messageObject.data.description
+                }
+              }));
+              break;
+
+            case "user.iceCandidate":
+              //Send ICE candidate
+              userConnections.sendMessageToUser(messageObject.data.userId, jsonParser.convertJsonMessage({
+                action: "user.iceCandidate",
+                data: {
+                  userId: userId,
+                  candidate: messageObject.data.candidate
+                }
+              }));
+              break;
           }
         }
       }

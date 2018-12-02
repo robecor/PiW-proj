@@ -1,13 +1,14 @@
 //The websocket connection
 const wsConnection = new WebSocket("ws://127.0.0.1:3005");
 let wsOpen = false;
+let selectedUserId = null;
 
 //Event for when the connection is open
 wsConnection.onopen = function (event) {
-  //When open hide the loader and show the name input
+  //When the connection is open hide the loader and show the name input
   DomManipulator.hideLoader();
-  // DomManipulator.showNameUnput();
-  DomManipulator.showMainApp();
+  DomManipulator.showNameUnput();
+  // DomManipulator.showMainApp();
   wsOpen = true;
 
   //Event for when we get a message from the server
@@ -26,8 +27,57 @@ wsConnection.onopen = function (event) {
       case "user.disconnected":
         DomManipulator.removeUserFromBox(messageObject.data.userId);
         break;
+      case "user.sdpOffer":
+        const newConnection = peerConnectionHandler.createNewConnection({
+          userId: messageObject.data.userId,
+          description: messageObject.data.description,
+          createOffer: false
+        });
+        break;
+      case "user.sdpAnswer":
+        peerConnectionHandler.processUserAnswer({
+          userId: messageObject.data.userId,
+          description: messageObject.data.description
+        });
+        break;
+      case "user.iceCandidate":
+        peerConnectionHandler.processUserCandidate({
+          userId: messageObject.data.userId,
+          candidate: messageObject.data.candidate
+        });
+        break;
     }
-  }
+  };
+
+  peerConnectionHandler.onIceCandidate = function (userId, candidate) {
+    wsConnection.send(Parser.convertJsonMessage({
+      action: "user.iceCandidate",
+      data: {
+        userId,
+        candidate
+      }
+    }));
+  };
+
+  peerConnectionHandler.onSdpOffer = function (userId, description) {
+    wsConnection.send(Parser.convertJsonMessage({
+      action: "user.sdpOffer",
+      data: {
+        userId,
+        description
+      }
+    }));
+  };
+
+  peerConnectionHandler.onSdpAnswer = function (userId, description) {
+    wsConnection.send(Parser.convertJsonMessage({
+      action: "user.sdpAnswer",
+      data: {
+        userId,
+        description
+      }
+    }));
+  };
 };
 
 //Function for the name set form
@@ -47,7 +97,24 @@ function setUserName() {
   }
 }
 
+function onInputKey(event) {
+  console.log(event);
+}
+
 DomEvents.onUserClick(function (userId) {
   DomManipulator.selectUserElement(userId);
   DomManipulator.hideWaitingBox();
+
+  const newConnection = peerConnectionHandler.createNewConnection({
+    userId: userId,
+    createOffer: true
+  });
+
+  selectedUserId = userId;
+});
+
+DomEvents.onInputEnterKey(function () {
+  const text = DomManipulator.getInputText();
+  peerConnectionHandler.userSendMessage(selectedUserId, text);
+  DomManipulator.clearChatInput();
 });

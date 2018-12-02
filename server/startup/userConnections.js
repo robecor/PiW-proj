@@ -46,10 +46,14 @@ const connectionMethods = {
     }
   },
 
-  getConnectedUsersWithName() {
-    const usersWithName = users.filter((user) => {
+  getConnectedUsersWithName(userId) {
+    let usersWithName = users.filter((user) => {
       return user.name;
     });
+
+    if (userId) {
+      usersWithName = usersWithName.filter(user => user._id !== userId)
+    }
 
     return usersWithName.map((user) => {
       return {

@@ -40,24 +40,24 @@
       <div class="user-list-container">
         <div class="users-container">
           <ul id="user-list-box" class="user-list">
-            <li class="user-list-element" id="el1" data-user-id="id1">
-              <div class="user-list-div">User 1</div>
-            </li>
-            <li class="user-list-element" id="el2" data-user-id="id2">
-              <div class="user-list-div">User 2</div>
-            </li>
-            <li class="user-list-element" id="el3" data-user-id="id3">
-              <div class="user-list-div">User 3</div>
-            </li>
-            <li class="user-list-element" id="el4" data-user-id="id4">
-              <div class="user-list-div">User 4</div>
-            </li>
-            <li class="user-list-element" id="el5" data-user-id="id5">
-              <div class="user-list-div">User 5</div>
-            </li>
-            <li class="user-list-element" id="el6" data-user-id="id6">
-              <div class="user-list-div">User 6</div>
-            </li>
+            <!--<li class="user-list-element" id="el1" data-user-id="id1">-->
+              <!--<div class="user-list-div">User 1</div>-->
+            <!--</li>-->
+            <!--<li class="user-list-element" id="el2" data-user-id="id2">-->
+              <!--<div class="user-list-div">User 2</div>-->
+            <!--</li>-->
+            <!--<li class="user-list-element" id="el3" data-user-id="id3">-->
+              <!--<div class="user-list-div">User 3</div>-->
+            <!--</li>-->
+            <!--<li class="user-list-element" id="el4" data-user-id="id4">-->
+              <!--<div class="user-list-div">User 4</div>-->
+            <!--</li>-->
+            <!--<li class="user-list-element" id="el5" data-user-id="id5">-->
+              <!--<div class="user-list-div">User 5</div>-->
+            <!--</li>-->
+            <!--<li class="user-list-element" id="el6" data-user-id="id6">-->
+              <!--<div class="user-list-div">User 6</div>-->
+            <!--</li>-->
           </ul>
         </div>
       </div>
@@ -71,7 +71,7 @@
         <div class="user-chat-actions">
           <div class="user-chat-action user-chat-input-container">
             <form action="javascript:;">
-              <input type="text" placeholder="Type here">
+              <input type="text" placeholder="Type here" id="text-message-input" onkeyup="onInputKey">
             </form>
           </div>
           <div class="user-chat-action user-chat-file">
@@ -90,6 +90,8 @@
 <script src="./lib/domManipulation.js"></script>
 <script src="./lib/messageParser.js"></script>
 <script src="./lib/domEvents.js"></script>
+<script src="./lib/Piw.js"></script>
+<script src="./lib/peerConnections.js"></script>
 <script src="./index.js"></script>
 </body>
 </html>
