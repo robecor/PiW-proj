@@ -44,10 +44,9 @@ function startWebsocket(server) {
               userConnections.sendMessageToUser(userId, jsonParser.convertJsonMessage({
                 action: "user.list",
                 data: {
-                  users: userConnections.getConnectedUsersWithName()
+                  users: userConnections.getConnectedUsersWithName(userId)
                 }
               }));
-
 
               //Notify connected users that someone connected
               userConnections.sendMessageToAllUsers(userId, jsonParser.convertJsonMessage({
@@ -62,43 +61,34 @@ function startWebsocket(server) {
               break;
 
             case "user.sdpOffer":
-              const targetUserId = messageObject.data.userId;
-              const description = messageObject.data.description;
-
               //Send sdp offer
-              userConnections.sendMessageToUser(targetUserId, jsonParser.convertJsonMessage({
+              userConnections.sendMessageToUser(messageObject.data.userId, jsonParser.convertJsonMessage({
                 action: "user.sdpOffer",
                 data: {
                   userId: userId,
-                  description
+                  description: messageObject.data.description
                 }
               }));
               break;
 
             case "user.sdpAnswer":
-              const targetUserId = messageObject.data.userId;
-              const description = messageObject.data.description;
-
               //Send the sdp answer
-              userConnections.sendMessageToUser(targetUserId, jsonParser.convertJsonMessage({
+              userConnections.sendMessageToUser(messageObject.data.userId, jsonParser.convertJsonMessage({
                 action: "user.sdpAnswer",
                 data: {
                   userId: userId,
-                  description
+                  description: messageObject.data.description
                 }
               }));
               break;
 
             case "user.iceCandidate":
-              const targetUserId = messageObject.data.userId;
-              const candidate = messageObject.data.candidate;
-
               //Send ICE candidate
-              userConnections.sendMessageToUser(targetUserId, jsonParser.convertJsonMessage({
+              userConnections.sendMessageToUser(messageObject.data.userId, jsonParser.convertJsonMessage({
                 action: "user.iceCandidate",
                 data: {
                   userId: userId,
-                  candidate
+                  candidate: messageObject.data.candidate
                 }
               }));
               break;

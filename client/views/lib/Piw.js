@@ -21,12 +21,16 @@ class Piw {
     this.onAnswerCreation = options.onAnswerCreation;
   }
 
-  processAnswer(desc) {
+  processOffer(desc) {
     this.peerConnection.setRemoteDescription(desc);
     this.peerConnection.createAnswer((desc) => {
       this.peerConnection.setLocalDescription(desc);
       this.onAnswerCreation(desc);
     });
+  }
+
+  processAnswer(desc) {
+    this.peerConnection.setRemoteDescription(desc);
   }
 
   processIceCandidate(candidate) {

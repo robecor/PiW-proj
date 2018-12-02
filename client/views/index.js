@@ -6,8 +6,8 @@ let wsOpen = false;
 wsConnection.onopen = function (event) {
   //When open hide the loader and show the name input
   DomManipulator.hideLoader();
-  // DomManipulator.showNameUnput();
-  DomManipulator.showMainApp();
+  DomManipulator.showNameUnput();
+  // DomManipulator.showMainApp();
   wsOpen = true;
 
   //Event for when we get a message from the server
@@ -25,6 +25,24 @@ wsConnection.onopen = function (event) {
         break;
       case "user.disconnected":
         DomManipulator.removeUserFromBox(messageObject.data.userId);
+        break;
+      case "user.sdpOffer":
+        const newConnection = peerConnectionHandler.createNewConnection({
+          userId: messageObject.data.userId,
+          description: messageObject.data.description
+        });
+        break;
+      case "user.sdpAnswer":
+        peerConnectionHandler.processUserAnswer({
+          userId: messageObject.data.userId,
+          description: messageObject.data.description
+        });
+        break;
+      case "user.iceCandidate":
+        peerConnectionHandler.processUserCandidate({
+          userId: messageObject.data.userId,
+          candidate: messageObject.data.candidate
+        });
         break;
     }
   }
