@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Docs</title>
+</head>
+<body>
+  <header>
+    <h1>Technical report</h1>
+  </header>
+
+  <div role="contentinfo">
+    <section typeof="sa:AuthorsList">
+      <h2>Authors</h2>
+      <ul>
+        <li typeof="sa:ContributorRole" property="schema:author">
+          <span typeof="schema:Person" resource="https://github.com/robecor">
+            <meta property="schema:givenName" content="Robert">
+            <meta property="schema:additionalName" content="Cozmin">
+            <meta property="schema:familyName" content="Corolea">
+            <span property="schema:name">Corolea Robert-Cozmin</span>
+          </span>
+          <ul>
+            <li property="schema:roleContactPoint" typeof="schema:ContactPoint">
+              <a href="mailto:robert.corolea@cultofcoders.com" property="schema:email">
+                robert.corolea@cultofcoders.com
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+    <section>
+      <h1>Content</h1>
+      <ol>
+        <li>
+          <a href="#introduction-section">Introduction</a>
+        </li>
+        <li>
+          <a href="#development-steps">Development steps</a>
+        </li>
+        <li>
+          <a href="#data-models">Data models</a>
+        </li>
+        <li>
+          <a href="#client-storage">Storage</a>
+        </li>
+      </ol>
+    </section>
+  </div>
+
+  <section typeof="sa:Abstract" id="introduction-section" role="doc-introduction">
+    <h1>Introduction</h1>
+    <p>
+      In this report I will discuss the following:
+      <ul>
+        <li>Steps followed for project development,</li>
+        <li>Data model, such as scholarly html and WebRTC,</li>
+        <li>Client side solutions for storage.</li>
+      </ul>
+    </p>
+  </section>
+
+  <section typeof="sa:Abstract" id="development-steps">
+    <h1>Development steps</h1>
+    <p>
+      The project is split into 2 major parts. The first one is the server to client connection using Websockets and the second being the client to client connection using RTCPeerConnection
+      or peer-to-peer.
+      <br>
+      <br>
+      In the first step the Websocket connection is necessary for user discovery. A class is used to store the user information, such as id and name.
+      Each connected user is store in an array and removed when disconnected. The management is done by a controller that tracks each connection and adjusts communication,
+      which is done by using a special field <strong>action</strong>.
+      When a user connect he gets assigned a unique id and, after a value has been added to the input, a name. Each new user connected gets sent an array of objects that represent
+      the list of online users. For each of them we have an event listener for mouse click, which when activated it establishes the peer-to-peer connection that takes us to step 2.
+      <br>
+      <br>
+      In the second phase we use the RTC technology, more specifically the RTCPeerConnection class. Although we are talking about a peer to peer connection we still need a STUN server as a fallback.
+      In other to establish a full connection there are some required steps:
+      <ol>
+        <li>Sdp offer creation,</li>
+        <li>Sdp offer processing,</li>
+        <li>Sdp answer creation,</li>
+        <li>Sdp answer processing,</li>
+        <li>ICE candidate generation,</li>
+        <li>ICE candidate processing.</li>
+      </ol>
+      The sdp negotiation between the users can be seen as a request. The first user send a request to the second, which in turn sends back an answer.
+      ICE candidates are important for client discovery, or relativity based on present networks. Once the negotiation are complete the 2 users have a connection that can be used to transfer
+      text, files and live video. For the text and file transport will be used a RTCDataChannel generated from the RTCPeerConnection and and live video can be transferred directly through the peer connection.
+    </p>
+  </section>
+
+  <section typeof="sa:Abstract" id="data-models">
+    <h1>Data models</h1>
+    <p>
+      Server side we have the following data models:
+      <ul>
+        <li>
+          User - used to store the id, name and Websocket connection. Various methods are available for changing the name and interacting with the websocket.
+        </li>
+      </ul>
+      On the client we use:
+      <ul>
+        <li>
+          DomManipulator - provides various methods for interacting with the DOM elements.
+        </li>
+        <li>
+          DomEvents - used to listed to DOM elements events.
+        </li>
+        <li>
+          Piw - the framework that does the RTC connection, negotiations, data channel, etc.
+        </li>
+        <li>
+          PeerConnections - used for management of multiple Piw's. Here we store connections and manage them.
+        </li>
+      </ul>
+    </p>
+  </section>
+
+  <section typeof="sa:Abstract" id="client-storage">
+    <h1>Storage</h1>
+    <p>
+      For client-side storage I use the memory and DOM element data attributes.
+      Each connected user to the app will be displayed in a list. The list element will have as a data attribute the unique id assigned on the server.
+      We use this to know which user is selected on the click event.
+      At the same time the list of the user, the websocket connection, the RTC connection and the DOM elements we interact with are store in the memory as variables.
+      The DOM elements are stored in variables once at the start of the script so that the app is optimized. Querying the DOM for the elements every time we interact with them is cost heavy.
+      A controller stores and removes users from the array each time the servers notifies for a change.
+    </p>
+  </section>
+</body>
+</html>
