@@ -25,9 +25,30 @@ app.get("/", function (req, res) {
 app.get("/docs", function (req, res) {
   res.set({
     'Content-Type': 'text/html'
-  })
+  });
 
   res.sendFile(path.join(`${viewPath}/docs.html`));
+});
+app.get("/steps-docs", function (req, res) {
+  res.set({
+    'Content-Type': 'text/html'
+  });
+
+  res.sendFile(path.join(`${viewPath}/steps-docs.html`));
+});
+app.get("/uml-docs.xml", function (req, res) {
+  res.set({
+    'Content-Type': 'text/xml'
+  });
+
+  res.sendFile(path.join(`${viewPath}/docs/PiW-architecture.xml`));
+});
+app.get("/uml-docs.png", function (req, res) {
+  res.set({
+    'Content-Type': 'image/png'
+  });
+
+  res.sendFile(path.join(`${viewPath}/docs/PiW-architecture.png`));
 });
 
 app.listen(3000, function () {
