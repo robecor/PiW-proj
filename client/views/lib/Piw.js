@@ -106,4 +106,8 @@ class Piw {
       this.dataChannel.send(message);
     }
   }
+
+  closeConnection() {
+    this.peerConnection.close();
+  }
 }

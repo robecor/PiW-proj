@@ -26,6 +26,9 @@ wsConnection.onopen = function (event) {
         break;
       case "user.disconnected":
         DomManipulator.removeUserFromBox(messageObject.data.userId);
+        peerConnectionHandler.closeUserConnection(messageObject.data.userId);
+        DomManipulator.deleteUserMessages(messageObject.data.userId);
+        DomManipulator.showWaitingBox();
         break;
       case "user.sdpOffer":
         const newConnection = peerConnectionHandler.createNewConnection({

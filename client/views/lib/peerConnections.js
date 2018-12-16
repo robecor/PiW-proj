@@ -73,6 +73,24 @@ const peerConnectionHandler = {
     }
   },
 
+  removeUserConnection(userId) {
+    let foundIndex = -1;
+    userConnections.forEach((connection, index) => {
+      if (connection.userId === userId) {
+        foundIndex = index;
+      }
+    });
+
+    userConnections.splice(foundIndex, 1);
+  },
+
+  closeUserConnection(userId) {
+    const connection = this.getUserConnection(userId);
+
+    connection.closeConnection();
+    this.removeUserConnection(userId);
+  },
+
   onIceCandidate(userId, candidate) {
 
   },

@@ -177,4 +177,8 @@ class DomManipulator {
       messageList.appendChild(message);
     });
   }
+
+  static deleteUserMessages(userId) {
+    delete userElements[userId];
+  }
 }
