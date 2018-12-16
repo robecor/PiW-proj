@@ -78,6 +78,10 @@ wsConnection.onopen = function (event) {
       }
     }));
   };
+
+  peerConnectionHandler.onDataMessage = function (userId, message) {
+    DomManipulator.addMessageToList(message, new Date(), false, userId);
+  }
 };
 
 //Function for the name set form
@@ -110,6 +114,10 @@ DomEvents.onUserClick(function (userId) {
     createOffer: true
   });
 
+  if (selectedUserId !== userId) {
+    DomManipulator.clearChatInput();
+  }
+
   selectedUserId = userId;
 });
 
@@ -117,4 +125,5 @@ DomEvents.onInputEnterKey(function () {
   const text = DomManipulator.getInputText();
   peerConnectionHandler.userSendMessage(selectedUserId, text);
   DomManipulator.clearChatInput();
+  DomManipulator.addMessageToList(text, new Date(), true, selectedUserId);
 });

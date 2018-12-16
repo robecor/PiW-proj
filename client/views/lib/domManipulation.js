@@ -135,4 +135,18 @@ class DomManipulator {
 
     messageListCont.scrollTo(0, messageListCont.scrollHeight);
   }
+
+  static clearChatList() {
+    while (messageList.firstChild) {
+      messageList.removeChild(messageList.firstChild);
+    }
+  }
+
+  static howUserMessages(userId) {
+    const messages = messageListElements[userId] || [];
+
+    messages.forEach((message) => {
+      messageList.appendChild(message);
+    });
+  }
 }

@@ -23,6 +23,9 @@ const peerConnectionHandler = {
       },
       onAnswerCreation(desc) {
         self.onSdpAnswer(userId, desc);
+      },
+      onDataMessage(message) {
+        self.onDataMessage(userId, message);
       }
     });
 

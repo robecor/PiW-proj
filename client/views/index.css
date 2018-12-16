@@ -319,7 +319,7 @@
     content: '';
     position: absolute;
     bottom: 0;
-    left: 10%;
+    left: 20px;
     width: 0;
     height: 0;
     border: 20px solid transparent;
@@ -338,7 +338,7 @@
 
 .message-list-item.right .message-item-text:after {
     left: auto;
-    right: 10%;
+    right: 20px;
     border-left: 20px solid;
     border-right: 0;
     border-top-color: #00a7e2;
