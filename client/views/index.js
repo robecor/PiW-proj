@@ -19,13 +19,16 @@ wsConnection.onopen = function (event) {
       case "user.list":
         DomManipulator.hideLoader();
         DomManipulator.showMainApp();
-        DomManipulator.setUserInBox(messageObject.data.users);
+        DomManipulator.setUsersInBox(messageObject.data.users);
         break;
       case "user.connected":
         DomManipulator.addUserInBox(messageObject.data.user);
         break;
       case "user.disconnected":
         DomManipulator.removeUserFromBox(messageObject.data.userId);
+        peerConnectionHandler.closeUserConnection(messageObject.data.userId);
+        DomManipulator.deleteUserMessages(messageObject.data.userId);
+        DomManipulator.showWaitingBox();
         break;
       case "user.sdpOffer":
         const newConnection = peerConnectionHandler.createNewConnection({
@@ -78,6 +81,16 @@ wsConnection.onopen = function (event) {
       }
     }));
   };
+
+  peerConnectionHandler.onDataMessage = function (userId, message) {
+    const isSelectedUser = selectedUserId === userId;
+
+    DomManipulator.addMessageToList(message, new Date(), false, userId, isSelectedUser);
+
+    if (!isSelectedUser) {
+      DomManipulator.showUserUnread(userId);
+    }
+  }
 };
 
 //Function for the name set form
@@ -110,6 +123,12 @@ DomEvents.onUserClick(function (userId) {
     createOffer: true
   });
 
+  if (selectedUserId !== userId) {
+    DomManipulator.clearChatList();
+    DomManipulator.showUserMessages(userId);
+    DomManipulator.hideUserUnread(userId);
+  }
+
   selectedUserId = userId;
 });
 
@@ -117,4 +136,5 @@ DomEvents.onInputEnterKey(function () {
   const text = DomManipulator.getInputText();
   peerConnectionHandler.userSendMessage(selectedUserId, text);
   DomManipulator.clearChatInput();
+  DomManipulator.addMessageToList(text, new Date(), true, selectedUserId, true);
 });

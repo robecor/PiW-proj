@@ -222,6 +222,22 @@
 .user-list-div {
     padding: 10px 20px;
     pointer-events: none;
+    position: relative;
+}
+
+.user-list-element.has-unread .user-list-unread {
+    display: block;
+}
+
+.user-list-unread {
+    width: 15px;
+    height: 15px;
+    background-color: #d81313;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    display: none;
 }
 
 .chat-container {
@@ -230,6 +246,7 @@
     border: 2px solid #00a7e2;
     height: 500px;
     position: relative;
+    overflow: hidden;
 }
 
 .user-chat-waiting {
@@ -255,6 +272,9 @@
 .message-cont {
     height: 80%;
     border-bottom: 1px dashed #00a7e2;
+    overflow-y: scroll;
+    margin-right: -80px;
+    padding-right: 60px;
 }
 
 .user-chat-actions {
@@ -286,6 +306,66 @@
     }
 }
 
+.message-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.message-list-item {
+    display: flex;
+    margin-bottom: 40px;
+}
+
+.message-list-item.right {
+    flex-direction: row-reverse;
+}
+
+.message-item-text {
+    position: relative;
+    background: #ced8f4;
+    border-radius: .4em;
+    color: #000000;
+    padding: 5px 10px;
+    transform-origin: left bottom;
+    animation: text-popup-animation 0.3s linear 0s 1 normal;
+}
+
+.message-item-text:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-top-color: #ced8f4;
+    border-bottom: 0;
+    border-left: 0;
+    margin-left: -10px;
+    margin-bottom: -20px;
+}
+
+.message-list-item.right .message-item-text {
+    background: #00a7e2;
+    color: #ffffff;
+    transform-origin: right bottom;
+}
+
+.message-list-item.right .message-item-text:after {
+    left: auto;
+    right: 20px;
+    border-left: 20px solid;
+    border-right: 0;
+    border-top-color: #00a7e2;
+}
+
+.message-item-date {
+    font-size: 12px;
+    margin-top: 8px;
+    opacity: 0.6;
+}
+
 @keyframes loading-animation {
     0% {
         transform: rotate(0deg);
@@ -293,5 +373,27 @@
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+@keyframes text-popup-animation {
+    0% {
+        transform: scale(0);
+    }
+
+    70% {
+        transform: scale(1.1);
+    }
+
+    80% {
+        transform: scale(0.9);
+    }
+
+    90% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }

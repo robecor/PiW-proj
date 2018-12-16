@@ -25,13 +25,12 @@ class Piw {
     this.peerConnection.addEventListener("iceconnectionstatechange", options.onIceConnectionStateChange);
 
     if (options.createOffer) {
-      console.log(1);
       this.dataChannel = this.peerConnection.createDataChannel("dataChannel");
       console.log(this.dataChannel);
 
-      this.dataChannel.onmessage = self.onChannelMessage;
+      self.dataChannel.onmessage = self.onChannelMessage.bind(self);
 
-      this.peerConnection.createOffer(
+      self.peerConnection.createOffer(
         {
           mandatory: {
             'OfferToReceiveAudio': true,
@@ -41,23 +40,22 @@ class Piw {
           'offerToReceiveVideo': true
         }
       ).then((desc) => {
-        this.peerConnection.setLocalDescription(desc);
-        console.log(`Created local offer for ${this.userId}:\n`, desc);
+        self.peerConnection.setLocalDescription(desc);
+        console.log(`Created local offer for ${self.userId}:\n`, desc);
         options.onOfferCreation(desc);
       }).catch((err) => {
         console.log(err);
       });
     } else {
-      console.log(2);
-      this.peerConnection.ondatachannel = function (event) {
-        this.dataChannel = event.channel;
-        console.log(this.dataChannel);
+      self.peerConnection.ondatachannel = function (event) {
+        self.dataChannel = event.channel;
 
-        this.dataChannel.onmessage = self.onChannelMessage;
+        self.dataChannel.onmessage = self.onChannelMessage.bind(self);
       }
     }
 
-    this.onAnswerCreation = options.onAnswerCreation;
+    self.onAnswerCreation = options.onAnswerCreation;
+    self.onDataMessage = options.onDataMessage;
   }
 
   processOffer(desc) {
@@ -98,13 +96,18 @@ class Piw {
   }
 
   onChannelMessage(event) {
-    console.log(event.data);
+    if (this.onDataMessage) {
+      this.onDataMessage(event.data);
+    }
   }
 
   sendChannelMessage(message) {
-    console.log(this.dataChannel);
     if (this.dataChannel) {
       this.dataChannel.send(message);
     }
+  }
+
+  closeConnection() {
+    this.peerConnection.close();
   }
 }
