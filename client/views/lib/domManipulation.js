@@ -62,7 +62,7 @@ class DomManipulator {
     userElements.push(userListElement);
   }
 
-  static setUserInBox(users) {
+  static setUsersInBox(users) {
     users.forEach((user) => {
       this.addUserInBox(user);
     });

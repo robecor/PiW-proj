@@ -78,7 +78,7 @@ const connectionMethods = {
       toSendUsers = toSendUsers.filter(user => user._id !== userId);
     }
 
-    toSendUsers.forEach((user) => {
+    toSendUsers.filter(user => !!user.name).forEach((user) => {
       user.ws.send(message);
     });
   }
