@@ -6,17 +6,11 @@ const userListBox = document.getElementById("user-list-box");
 const userChatContainer = document.getElementById("user-chat-container");
 const chatWaitingBox = document.getElementById("chat-waiting-container");
 const textInput = document.getElementById("text-message-input");
-const userElements = [];
+const messageListCont = document.getElementById("user-message-container");
+const messageList = document.getElementById("message-list");
 
-//Testing purpose
-// const userElements = [
-//   document.getElementById("el1"),
-//   document.getElementById("el2"),
-//   document.getElementById("el3"),
-//   document.getElementById("el4"),
-//   document.getElementById("el5"),
-//   document.getElementById("el6"),
-// ];
+const messageListElements = {};
+const userElements = [];
 
 class DomManipulator {
   static hideLoader() {
@@ -105,5 +99,40 @@ class DomManipulator {
 
   static clearChatInput() {
     textInput.value = "";
+  }
+
+  static formatDate(date) {
+    const day = date.getDate();
+    const month = date.getMonth();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+
+    return `${day}/${month} ${hour}:${minute}`;
+  }
+
+  static addMessageToList(message, date, isMe, userId) {
+    const listItem = document.createElement("li");
+    const listItemMessageDiv = document.createElement("div");
+    const listItemDateDiv = document.createElement("div");
+
+    listItem.classList.add("message-list-item");
+    listItem.classList.add(`${isMe ? "right" : "left"}`);
+    listItemMessageDiv.classList.add("message-item-text");
+    listItemDateDiv.classList.add("message-item-date");
+
+    listItemMessageDiv.innerText = message;
+    listItemDateDiv.innerText = this.formatDate(date);
+
+    listItemMessageDiv.appendChild(listItemDateDiv);
+    listItem.appendChild(listItemMessageDiv);
+    messageList.appendChild(listItem);
+
+    if (messageListElements[userId]) {
+      messageListElements[userId].push(listItem);
+    } else {
+      messageListElements[userId] = [listItem];
+    }
+
+    messageListCont.scrollTo(0, messageListCont.scrollHeight);
   }
 }
