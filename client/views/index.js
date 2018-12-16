@@ -124,7 +124,7 @@ DomEvents.onUserClick(function (userId) {
   });
 
   if (selectedUserId !== userId) {
-    DomManipulator.clearChatInput();
+    DomManipulator.clearChatList();
     DomManipulator.showUserMessages(userId);
     DomManipulator.hideUserUnread(userId);
   }
