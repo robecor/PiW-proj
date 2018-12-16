@@ -80,7 +80,13 @@ wsConnection.onopen = function (event) {
   };
 
   peerConnectionHandler.onDataMessage = function (userId, message) {
-    DomManipulator.addMessageToList(message, new Date(), false, userId);
+    const isSelectedUser = selectedUserId === userId;
+
+    DomManipulator.addMessageToList(message, new Date(), false, userId, isSelectedUser);
+
+    if (!isSelectedUser) {
+      DomManipulator.showUserUnread(userId);
+    }
   }
 };
 
@@ -116,6 +122,8 @@ DomEvents.onUserClick(function (userId) {
 
   if (selectedUserId !== userId) {
     DomManipulator.clearChatInput();
+    DomManipulator.showUserMessages(userId);
+    DomManipulator.hideUserUnread(userId);
   }
 
   selectedUserId = userId;
@@ -125,5 +133,5 @@ DomEvents.onInputEnterKey(function () {
   const text = DomManipulator.getInputText();
   peerConnectionHandler.userSendMessage(selectedUserId, text);
   DomManipulator.clearChatInput();
-  DomManipulator.addMessageToList(text, new Date(), true, selectedUserId);
+  DomManipulator.addMessageToList(text, new Date(), true, selectedUserId, true);
 });

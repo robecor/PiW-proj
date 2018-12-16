@@ -222,6 +222,22 @@
 .user-list-div {
     padding: 10px 20px;
     pointer-events: none;
+    position: relative;
+}
+
+.user-list-element.has-unread .user-list-unread {
+    display: block;
+}
+
+.user-list-unread {
+    width: 15px;
+    height: 15px;
+    background-color: #d81313;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    display: none;
 }
 
 .chat-container {

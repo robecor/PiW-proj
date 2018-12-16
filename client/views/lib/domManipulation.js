@@ -52,11 +52,16 @@ class DomManipulator {
   static addUserInBox(user) {
     const userDiv = document.createElement('div');
     const userListElement = document.createElement('li');
+    const userUnreadFlag = document.createElement('div');
+
     userListElement.setAttribute("data-user-id", user._id);
+
     userDiv.classList.add("user-list-div");
+    userUnreadFlag.classList.add("user-list-unread");
     userListElement.classList.add("user-list-element");
     userDiv.textContent = user.name;
 
+    userDiv.appendChild(userUnreadFlag);
     userListElement.appendChild(userDiv);
     userListBox.appendChild(userListElement);
     userElements.push(userListElement);
@@ -68,11 +73,15 @@ class DomManipulator {
     });
   }
 
-  static removeUserFromBox(userId) {
-    const userListElement = userElements.find((element) => {
+  static getUserListElementById(userId) {
+    return userElements.find((element) => {
       const userElementId = element.getAttribute("data-user-id");
       return userId === userElementId
     });
+  }
+
+  static removeUserFromBox(userId) {
+    const userListElement = this.getUserListElementById(userId);
 
     if (userListElement) {
       userListBox.removeChild(userListElement);
@@ -93,6 +102,22 @@ class DomManipulator {
     userChatContainer.scrollIntoView();
   }
 
+  static showUserUnread(userId) {
+    const userElement = this.getUserListElementById(userId);
+
+    if (userElement) {
+      userElement.classList.add("has-unread");
+    }
+  }
+
+  static hideUserUnread(userId) {
+    const userElement = this.getUserListElementById(userId);
+
+    if (userElement) {
+      userElement.classList.remove("has-unread");
+    }
+  }
+
   static getInputText() {
     return textInput.value;
   }
@@ -110,7 +135,7 @@ class DomManipulator {
     return `${day}/${month} ${hour}:${minute}`;
   }
 
-  static addMessageToList(message, date, isMe, userId) {
+  static addMessageToList(message, date, isMe, userId, appendToChatList) {
     const listItem = document.createElement("li");
     const listItemMessageDiv = document.createElement("div");
     const listItemDateDiv = document.createElement("div");
@@ -125,7 +150,11 @@ class DomManipulator {
 
     listItemMessageDiv.appendChild(listItemDateDiv);
     listItem.appendChild(listItemMessageDiv);
-    messageList.appendChild(listItem);
+
+    if (appendToChatList) {
+      messageList.appendChild(listItem);
+      messageListCont.scrollTo(0, messageListCont.scrollHeight);
+    }
 
     if (messageListElements[userId]) {
       messageListElements[userId].push(listItem);
@@ -133,7 +162,6 @@ class DomManipulator {
       messageListElements[userId] = [listItem];
     }
 
-    messageListCont.scrollTo(0, messageListCont.scrollHeight);
   }
 
   static clearChatList() {
@@ -142,7 +170,7 @@ class DomManipulator {
     }
   }
 
-  static howUserMessages(userId) {
+  static showUserMessages(userId) {
     const messages = messageListElements[userId] || [];
 
     messages.forEach((message) => {
