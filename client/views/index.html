@@ -56,17 +56,17 @@
 
         <div class="user-chat-actions">
           <div class="user-chat-action user-chat-input-container">
-            <form action="javascript:;">
-              <input type="text" placeholder="Type here" id="text-message-input" onkeyup="onInputKey" autocomplete="off">
+            <form action="javascript:;" class="chat-form" id="chat-message-form">
+              <input type="text" placeholder="Type here" id="text-message-input" class="chat-input"
+                     autocomplete="off">
+              <button class="chat-send-button" type="submit">Send</button>
             </form>
           </div>
           <div class="user-chat-action user-chat-file">
-            <form action="javascript:;">
-              <input type="file">
+            <form action="javascript:;" class="chat-file-form">
+              <input type="file" class="chat-file-input">
             </form>
-          </div>
-          <div class="user-chat-action user-chat-camera">
-            <button>Video</button>
+            <button class="chat-video-button" id="video-start-button">Video</button>
           </div>
         </div>
       </div>
