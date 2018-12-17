@@ -22,8 +22,6 @@ userListBox.addEventListener("click", function (event) {
   DomEvents.onUserClickCallback(userId);
 });
 
-textInput.addEventListener("keyup", function(event) {
-  if (event.which === 13) {
+chatInputForm.addEventListener("submit", function(event) {
     DomEvents.onInputEnterKeyCallback();
-  }
 });

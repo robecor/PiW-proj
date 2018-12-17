@@ -8,6 +8,7 @@ const chatWaitingBox = document.getElementById("chat-waiting-container");
 const textInput = document.getElementById("text-message-input");
 const messageListCont = document.getElementById("user-message-container");
 const messageList = document.getElementById("message-list");
+const chatInputForm = document.getElementById("chat-message-form");
 
 const messageListElements = {};
 const userElements = [];
