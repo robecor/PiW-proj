@@ -479,6 +479,92 @@
     opacity: 0.6;
 }
 
+.modal-cont {
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-cont.hidden {
+    display: none;
+}
+
+.modal {
+    flex: 0 1 500px;
+    height: 200px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 50px 20px;
+    animation: modal-popup-animation 0.3s ease-out 0s 1 normal;
+}
+
+.confirm-modal {
+    width: 100%;
+    height: 100%;
+}
+
+.confirm-modal-text {
+    text-align: center;
+    font-size: 24px;
+    margin: 30px 0;
+}
+
+.confirm-buttons {
+    margin: 100px 0;
+    padding: 0 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.refuse-button {
+    flex: 0 0 auto;
+    color: #b40c12;
+    text-transform: uppercase;
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 4px solid #b40c12;
+    border-radius: 5px;
+    display: inline-block;
+    transition: transform 0.3s ease 0s, border-radius 0.3s ease 0s, border-color 0.3s ease 0s;
+    cursor: pointer;
+    margin: 0;
+}
+
+.refuse-button:hover {
+    color: #ea0c12 !important;
+    border-color: #ea0c12 !important;
+    transform: scale(1.2, 1.2);
+}
+
+.accept-button {
+    flex: 0 0 auto;
+    color: #00a7e2;
+    text-transform: uppercase;
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 4px solid #00a7e2;
+    border-radius: 5px;
+    display: inline-block;
+    transition: transform 0.3s ease 0s, border-radius 0.3s ease 0s, border-color 0.3s ease 0s;
+    cursor: pointer;
+    margin: 0;
+}
+
+.accept-button:hover {
+    color: #00bcff !important;
+    border-color: #00bcff !important;
+    transform: scale(1.2, 1.2);
+}
+
 @keyframes loading-animation {
     0% {
         transform: rotate(0deg);
@@ -504,6 +590,20 @@
 
     90% {
         transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes modal-popup-animation {
+    0% {
+        transform: scale(0);
+    }
+
+    70% {
+        transform: scale(1.1);
     }
 
     100% {
