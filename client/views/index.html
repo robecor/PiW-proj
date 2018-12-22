@@ -74,13 +74,19 @@
   </div>
   <div class="modal-cont" id="modal-container">
     <div class="modal">
-      <div class="confirm-modal" id="confirmation-modal">
+      <div class="confirm-modal hidden" id="confirmation-modal">
         <div class="confirm-modal-text" id="confirmation-text">
           User is calling...
         </div>
         <div class="confirm-buttons">
           <button class="refuse-button" id="confirmation-refuse">Refuse</button>
           <button class="accept-button" id="confirmation-accept">Accept</button>
+        </div>
+      </div>
+      <div class="video-modal" id="video-modal">
+        <video src="https://media.w3.org/2010/05/sintel/trailer.mp4" class="video-element" id="video-element" autoplay></video>
+        <div class="video-buttons">
+          <button class="close-button" id="video-close">Close</button>
         </div>
       </div>
     </div>
