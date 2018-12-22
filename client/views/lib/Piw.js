@@ -4,6 +4,7 @@ class Piw {
     this.userId = options.userId;
     this.isConnecting = false;
     this.isConnected = false;
+    this.fileBuffer = [];
 
     this.peerServerConfig = {
       iceServers: [
@@ -19,14 +20,12 @@ class Piw {
         self.isConnected = true;
         return;
       }
-      console.log(`Generated candidate for ${this.userId}:\n`, event.candidate);
       options.onIceCandidate(event.candidate);
     });
     this.peerConnection.addEventListener("iceconnectionstatechange", options.onIceConnectionStateChange);
 
     if (options.createOffer) {
       this.dataChannel = this.peerConnection.createDataChannel("dataChannel");
-      console.log(this.dataChannel);
 
       self.dataChannel.onmessage = self.onChannelMessage.bind(self);
 
@@ -41,7 +40,6 @@ class Piw {
         }
       ).then((desc) => {
         self.peerConnection.setLocalDescription(desc);
-        console.log(`Created local offer for ${self.userId}:\n`, desc);
         options.onOfferCreation(desc);
       }).catch((err) => {
         console.log(err);
@@ -56,10 +54,10 @@ class Piw {
 
     self.onAnswerCreation = options.onAnswerCreation;
     self.onDataMessage = options.onDataMessage;
+    self.onDataFile = options.onDataFile;
   }
 
   processOffer(desc) {
-    console.log(`Processing offer for ${this.userId}:\n`, desc);
     this.peerConnection.setRemoteDescription(desc);
     this.peerConnection.createAnswer(
       {
@@ -71,40 +69,84 @@ class Piw {
         'offerToReceiveVideo': true
       }
     ).then((desc) => {
-      console.log(`Created answer for ${this.userId}:\n`, desc);
       this.peerConnection.setLocalDescription(desc);
       this.onAnswerCreation(desc);
     }).catch((err) => {
-      console.log(err);
     });
   }
 
   processAnswer(desc) {
-    console.log(`Processing answer for ${this.userId}:\n`, desc);
     this.peerConnection.setRemoteDescription(desc);
   }
 
   processIceCandidate(candidate) {
-    console.log(`Processing candidate for ${this.userId}:\n`, candidate);
     const iceCandidate = new RTCIceCandidate(candidate);
     this.peerConnection.addIceCandidate(iceCandidate)
       .then(() => {
-        console.log("Success adding candidate");
       }).catch((error) => {
-      console.log("Error adding candidate");
     });
   }
 
   onChannelMessage(event) {
-    if (this.onDataMessage) {
-      this.onDataMessage(event.data);
+    const data = event.data;
+
+    if (typeof data === "string") {
+      if (data === "__Piw__.buffer.done") {
+        this.finishFileMessage();
+      } else {
+        if (this.onDataMessage) {
+          this.onDataMessage(data);
+        }
+      }
+    } else {
+      this.fileBuffer.push(data);
     }
+  }
+
+  finishFileMessage() {
+    const bufferArray = this.fileBuffer;
+    let byteLength = 0;
+    let currentLength = 0;
+
+    bufferArray.forEach((buffer) => {
+      byteLength += buffer.byteLength;
+    });
+
+    const uIntArray = new Uint8Array(byteLength);
+
+    bufferArray.forEach((buffer) => {
+      uIntArray.set(new Uint8Array(buffer), currentLength);
+
+      currentLength += buffer.byteLength;
+    });
+
+    const fileBlob = new Blob([uIntArray]);
+
+    if (this.onDataFile) {
+      this.onDataFile(fileBlob);
+    }
+
+    this.fileBuffer = [];
   }
 
   sendChannelMessage(message) {
     if (this.dataChannel) {
       this.dataChannel.send(message);
     }
+  }
+
+  sendFile(file) {
+    const reader = new FileReader();
+    const self = this;
+
+    reader.onload = function () {
+      const arrayBuffer = this.result;
+
+      self.dataChannel.send(arrayBuffer);
+      self.dataChannel.send("__Piw__.buffer.done");
+    };
+
+    reader.readAsArrayBuffer(file);
   }
 
   closeConnection() {
