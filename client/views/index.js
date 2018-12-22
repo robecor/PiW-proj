@@ -90,7 +90,17 @@ wsConnection.onopen = function (event) {
     if (!isSelectedUser) {
       DomManipulator.showUserUnread(userId);
     }
-  }
+  };
+
+  peerConnectionHandler.onDataFile = function (userId, fileBlob) {
+    const isSelectedUser = selectedUserId === userId;
+
+    DomManipulator.addFileToChat(fileBlob, new Date(), false, userId, isSelectedUser);
+
+    if (!isSelectedUser) {
+      DomManipulator.showUserUnread(userId);
+    }
+  };
 };
 
 //Function for the name set form
@@ -108,10 +118,6 @@ function setUserName() {
       }
     }));
   }
-}
-
-function onInputKey(event) {
-  console.log(event);
 }
 
 DomEvents.onUserClick(function (userId) {
@@ -137,4 +143,10 @@ DomEvents.onInputEnterKey(function () {
   peerConnectionHandler.userSendMessage(selectedUserId, text);
   DomManipulator.clearChatInput();
   DomManipulator.addMessageToList(text, new Date(), true, selectedUserId, true);
+});
+
+DomEvents.onFileUpload(function (file) {
+  peerConnectionHandler.userSendFile(selectedUserId, file);
+  DomManipulator.clearFileField();
+  DomManipulator.addFileToChat(file, new Date(), true, selectedUserId, true);
 });

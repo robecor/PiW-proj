@@ -26,6 +26,9 @@ const peerConnectionHandler = {
       },
       onDataMessage(message) {
         self.onDataMessage(userId, message);
+      },
+      onDataFile(fileBlob) {
+        self.onDataFile(userId, fileBlob);
       }
     });
 
@@ -73,6 +76,14 @@ const peerConnectionHandler = {
     }
   },
 
+  userSendFile(userId, file) {
+    const connection = this.getUserConnection(userId);
+
+    if (connection) {
+      connection.sendFile(file);
+    }
+  },
+
   removeUserConnection(userId) {
     let foundIndex = -1;
     userConnections.forEach((connection, index) => {
@@ -87,7 +98,9 @@ const peerConnectionHandler = {
   closeUserConnection(userId) {
     const connection = this.getUserConnection(userId);
 
-    connection.closeConnection();
+    if (connection) {
+      connection.closeConnection();
+    }
     this.removeUserConnection(userId);
   },
 

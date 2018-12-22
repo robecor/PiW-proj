@@ -1,6 +1,10 @@
 const DomEvents = {
-  onUserClickCallback: function(){},
-  onInputEnterKeyCallback: function(){},
+  onUserClickCallback: function () {
+  },
+  onInputEnterKeyCallback: function () {
+  },
+  onFileUploadCallback: function () {
+  },
 
   onUserClick(callback) {
     if (callback && typeof callback === "function") {
@@ -12,6 +16,12 @@ const DomEvents = {
     if (callback && typeof callback === "function") {
       this.onInputEnterKeyCallback = callback;
     }
+  },
+
+  onFileUpload(callback) {
+    if (callback && typeof callback === "function") {
+      this.onFileUploadCallback = callback;
+    }
   }
 };
 
@@ -22,6 +32,14 @@ userListBox.addEventListener("click", function (event) {
   DomEvents.onUserClickCallback(userId);
 });
 
-chatInputForm.addEventListener("submit", function(event) {
-    DomEvents.onInputEnterKeyCallback();
+chatInputForm.addEventListener("submit", function (event) {
+  DomEvents.onInputEnterKeyCallback();
+});
+
+fileInput.addEventListener("change", function (event) {
+  const file = fileInput.files[0];
+
+  if (file) {
+    DomEvents.onFileUploadCallback(file);
+  }
 });

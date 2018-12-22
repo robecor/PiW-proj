@@ -9,6 +9,7 @@ const textInput = document.getElementById("text-message-input");
 const messageListCont = document.getElementById("user-message-container");
 const messageList = document.getElementById("message-list");
 const chatInputForm = document.getElementById("chat-message-form");
+const fileInput = document.getElementById("file-input");
 
 const messageListElements = {};
 const userElements = [];
@@ -165,6 +166,39 @@ class DomManipulator {
 
   }
 
+  static addFileToChat(fileBlob, date, isMe, userId, appendToChatList) {
+    const listItem = document.createElement("li");
+    const listItemMessageDiv = document.createElement("div");
+    const listItemFileAnchor = document.createElement("a");
+    const listItemDateDiv = document.createElement("div");
+
+    listItem.classList.add("message-list-item");
+    listItem.classList.add(`${isMe ? "right" : "left"}`);
+    listItemMessageDiv.classList.add("message-item-text");
+    listItemDateDiv.classList.add("message-item-date");
+
+    listItemMessageDiv.innerText = isMe ? "You sent a file" : "Sent you a file";
+    listItemDateDiv.innerText = this.formatDate(date);
+
+    listItemFileAnchor.href = window.URL.createObjectURL(fileBlob);
+    listItemFileAnchor.download = "File";
+
+    listItemFileAnchor.appendChild(listItemMessageDiv);
+    listItemMessageDiv.appendChild(listItemDateDiv);
+    listItem.appendChild(listItemFileAnchor);
+
+    if (appendToChatList) {
+      messageList.appendChild(listItem);
+      messageListCont.scrollTo(0, messageListCont.scrollHeight);
+    }
+
+    if (messageListElements[userId]) {
+      messageListElements[userId].push(listItem);
+    } else {
+      messageListElements[userId] = [listItem];
+    }
+  }
+
   static clearChatList() {
     while (messageList.firstChild) {
       messageList.removeChild(messageList.firstChild);
@@ -181,5 +215,9 @@ class DomManipulator {
 
   static deleteUserMessages(userId) {
     delete userElements[userId];
+  }
+
+  static clearFileField() {
+    fileInput.value = "";
   }
 }
