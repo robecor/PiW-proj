@@ -5,6 +5,7 @@ class Piw {
     this.isConnecting = false;
     this.isConnected = false;
     this.fileBuffer = [];
+    this.startedCall = false;
 
     this.peerServerConfig = {
       iceServers: [
@@ -15,6 +16,9 @@ class Piw {
     };
 
     this.peerConnection = new RTCPeerConnection(this.peerServerConfig);
+
+    this.peerConnection.ontrack = this.onNewTrack.bind(this);
+
     this.peerConnection.addEventListener("icecandidate", (event) => {
       if (!event.candidate) {
         self.isConnected = true;
@@ -56,9 +60,12 @@ class Piw {
     self.onDataMessage = options.onDataMessage;
     self.onDataFile = options.onDataFile;
     self.onCallRequest = options.onCallRequest;
+    self.onCallAccepted = options.onCallAccepted;
+    self.onOfferCreation = options.onOfferCreation;
   }
 
   processOffer(desc) {
+    console.log("Processing offer");
     this.peerConnection.setRemoteDescription(desc);
     this.peerConnection.createAnswer(
       {
@@ -77,6 +84,7 @@ class Piw {
   }
 
   processAnswer(desc) {
+    console.log("Processing answer");
     this.peerConnection.setRemoteDescription(desc);
   }
 
@@ -99,7 +107,9 @@ class Piw {
       } else if (data === "__Piw__.call.refuse") {
 
       } else if (data === "__Piw__.call.accept") {
-
+        this.startMediaAndSend();
+        this.onCallAccepted();
+        this.startedCall = true;
       } else {
         if (this.onDataMessage) {
           this.onDataMessage(data);
@@ -175,6 +185,52 @@ class Piw {
   acceptCall() {
     if (this.dataChannel) {
       this.dataChannel.send("__Piw__.call.accept");
+      this.startMediaAndSend();
+    }
+  }
+
+  startMediaAndSend() {
+    const self = this;
+
+    navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: true
+    }).then((localStream) => {
+      self.localStream = localStream;
+
+      localStream.getTracks().forEach((track) => {
+        self.peerConnection.addTrack(track, localStream);
+      });
+
+      self.negotationNeeded();
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  onNewTrack(event) {
+    videoElement.srcObject = event.streams[0];
+  }
+
+  negotationNeeded() {
+    const self = this;
+
+    if (this.startedCall) {
+      this.peerConnection.createOffer(
+        {
+          mandatory: {
+            'OfferToReceiveAudio': true,
+            'OfferToReceiveVideo': true
+          },
+          'offerToReceiveAudio': true,
+          'offerToReceiveVideo': true
+        }
+      ).then((desc) => {
+        self.peerConnection.setLocalDescription(desc);
+        self.onOfferCreation(desc);
+      }).catch((err) => {
+        console.log(err);
+      });
     }
   }
 }

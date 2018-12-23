@@ -32,6 +32,9 @@ const peerConnectionHandler = {
       },
       onCallRequest() {
         self.onCallRequest(userId);
+      },
+      onCallAccepted() {
+        self.onCallAccepted(userId);
       }
     });
 
@@ -128,6 +131,14 @@ const peerConnectionHandler = {
 
     if (connection) {
       connection.acceptCall();
+    }
+  },
+
+  startMediaAndSend(userId) {
+    const connection = this.getUserConnection(userId);
+
+    if (connection) {
+      connection.startMediaAndSend();
     }
   },
 

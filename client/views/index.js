@@ -1,5 +1,5 @@
 //The websocket connection
-const wsConnection = new WebSocket("ws://127.0.0.1:3005");
+const wsConnection = new WebSocket("ws://192.168.1.72:3005");
 let wsOpen = false;
 let selectedUserId = null;
 
@@ -31,11 +31,20 @@ wsConnection.onopen = function (event) {
         DomManipulator.showWaitingBox();
         break;
       case "user.sdpOffer":
-        const newConnection = peerConnectionHandler.createNewConnection({
-          userId: messageObject.data.userId,
-          description: messageObject.data.description,
-          createOffer: false
-        });
+        const existingConnection = peerConnectionHandler.getUserConnection(messageObject.data.userId);
+
+        if (existingConnection) {
+          peerConnectionHandler.processUserOffer({
+            userId: messageObject.data.userId,
+            description: messageObject.data.description
+          });
+        } else {
+          const newConnection = peerConnectionHandler.createNewConnection({
+            userId: messageObject.data.userId,
+            description: messageObject.data.description,
+            createOffer: false
+          });
+        }
         break;
       case "user.sdpAnswer":
         peerConnectionHandler.processUserAnswer({
@@ -106,6 +115,11 @@ wsConnection.onopen = function (event) {
     DomManipulator.showConfirmationModal();
     DomManipulator.showModal();
   };
+
+  peerConnectionHandler.onCallAccepted = function (userId) {
+    DomManipulator.showVideoModal();
+    DomManipulator.showModal();
+  };
 };
 
 //Function for the name set form
@@ -167,7 +181,9 @@ DomEvents.onRefuseClick(function () {
 });
 
 DomEvents.onAcceptClick(function () {
-
+  peerConnectionHandler.acceptCall(selectedUserId);
+  DomManipulator.hideConfirmationModal();
+  DomManipulator.showVideoModal();
 });
 
 DomEvents.onVideoCloseClick(function () {
