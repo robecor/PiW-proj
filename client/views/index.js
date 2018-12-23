@@ -114,6 +114,11 @@ wsConnection.onopen = function (event) {
   };
 
   peerConnectionHandler.onCallRequest = function (userId) {
+    if (callingUserId) {
+      peerConnectionHandler.refuseCall(userId);
+      return;
+    }
+
     callingUserId = userId;
     DomManipulator.showConfirmationModal();
     DomManipulator.showModal();

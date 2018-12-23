@@ -135,6 +135,7 @@ const peerConnectionHandler = {
 
     if (connection) {
       connection.acceptCall();
+      connection.inCall = true;
     }
   },
 

@@ -8,6 +8,7 @@ class Piw {
     this.fileBuffer = [];
     this.startedCall = false;
     this.offerCreator = !!options.createOffer;
+    this.inCall = false;
 
     this.peerServerConfig = {
       iceServers: [
@@ -106,7 +107,11 @@ class Piw {
       if (data === "__Piw__.buffer.done") {
         this.finishFileMessage();
       } else if (data === "__Piw__.call.request") {
-        this.onCallRequest();
+        if (this.inCall) {
+          this.refuseCall();
+        } else {
+          this.onCallRequest();
+        }
       } else if (data === "__Piw__.call.refuse") {
 
       } else if (data === "__Piw__.call.ended") {
@@ -260,5 +265,7 @@ class Piw {
         this.dataChannel.send("__Piw__.call.ended");
       }
     }
+
+    this.inCall = false;
   }
 }
