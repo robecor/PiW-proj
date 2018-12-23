@@ -101,6 +101,11 @@ wsConnection.onopen = function (event) {
       DomManipulator.showUserUnread(userId);
     }
   };
+
+  peerConnectionHandler.onCallRequest = function (userId) {
+    DomManipulator.showConfirmationModal();
+    DomManipulator.showModal();
+  };
 };
 
 //Function for the name set form
@@ -151,8 +156,14 @@ DomEvents.onFileUpload(function (file) {
   DomManipulator.addFileToChat(file, new Date(), true, selectedUserId, true);
 });
 
-DomEvents.onRefuseClick(function () {
+DomEvents.onVideoStartClick(function () {
+  peerConnectionHandler.callUser(selectedUserId);
+});
 
+DomEvents.onRefuseClick(function () {
+  peerConnectionHandler.refuseCall(selectedUserId);
+  DomManipulator.hideModal();
+  DomManipulator.hideConfirmationModal();
 });
 
 DomEvents.onAcceptClick(function () {

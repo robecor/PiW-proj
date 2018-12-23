@@ -29,6 +29,9 @@ const peerConnectionHandler = {
       },
       onDataFile(fileBlob) {
         self.onDataFile(userId, fileBlob);
+      },
+      onCallRequest() {
+        self.onCallRequest(userId);
       }
     });
 
@@ -102,6 +105,30 @@ const peerConnectionHandler = {
       connection.closeConnection();
     }
     this.removeUserConnection(userId);
+  },
+
+  callUser(userId) {
+    const connection = this.getUserConnection(userId);
+
+    if (connection) {
+      connection.requestCall();
+    }
+  },
+
+  refuseCall(userId) {
+    const connection = this.getUserConnection(userId);
+
+    if (connection) {
+      connection.refuseCall();
+    }
+  },
+
+  acceptCall(userId) {
+    const connection = this.getUserConnection(userId);
+
+    if (connection) {
+      connection.acceptCall();
+    }
   },
 
   onIceCandidate(userId, candidate) {

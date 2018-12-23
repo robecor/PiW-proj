@@ -55,6 +55,7 @@ class Piw {
     self.onAnswerCreation = options.onAnswerCreation;
     self.onDataMessage = options.onDataMessage;
     self.onDataFile = options.onDataFile;
+    self.onCallRequest = options.onCallRequest;
   }
 
   processOffer(desc) {
@@ -93,6 +94,12 @@ class Piw {
     if (typeof data === "string") {
       if (data === "__Piw__.buffer.done") {
         this.finishFileMessage();
+      } else if (data === "__Piw__.call.request") {
+        this.onCallRequest();
+      } else if (data === "__Piw__.call.refuse") {
+
+      } else if (data === "__Piw__.call.accept") {
+
       } else {
         if (this.onDataMessage) {
           this.onDataMessage(data);
@@ -151,5 +158,23 @@ class Piw {
 
   closeConnection() {
     this.peerConnection.close();
+  }
+
+  requestCall() {
+    if (this.dataChannel) {
+      this.dataChannel.send("__Piw__.call.request");
+    }
+  }
+
+  refuseCall() {
+    if (this.dataChannel) {
+      this.dataChannel.send("__Piw__.call.refuse");
+    }
+  }
+
+  acceptCall() {
+    if (this.dataChannel) {
+      this.dataChannel.send("__Piw__.call.accept");
+    }
   }
 }

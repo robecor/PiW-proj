@@ -11,6 +11,8 @@ const DomEvents = {
   },
   onVideoCloseClickCallback: function () {
   },
+  onVideoStartButtonClickCallback: function () {
+  },
 
   onUserClick(callback) {
     if (callback && typeof callback === "function") {
@@ -46,6 +48,12 @@ const DomEvents = {
     if (callback && typeof callback === "function") {
       this.onVideoCloseClickCallback = callback;
     }
+  },
+
+  onVideoStartClick(callback) {
+    if (callback && typeof callback === "function") {
+      this.onVideoStartButtonClickCallback = callback;
+    }
   }
 };
 
@@ -78,4 +86,8 @@ acceptButton.addEventListener("click", function (event) {
 
 videoCloseButton.addEventListener("click", function (event) {
   DomEvents.onVideoCloseClickCallback();
+});
+
+videoStartButton.addEventListener("click", function (event) {
+  DomEvents.onVideoStartButtonClickCallback();
 });

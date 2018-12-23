@@ -17,6 +17,7 @@ const refuseButton = document.getElementById("confirmation-refuse");
 const acceptButton = document.getElementById("confirmation-accept");
 const videoCloseButton = document.getElementById("video-close");
 const confirmationText = document.getElementById("confirmation-text");
+const videoStartButton = document.getElementById("video-start-button");
 
 const messageListElements = {};
 const userElements = [];
