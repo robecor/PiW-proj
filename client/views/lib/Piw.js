@@ -66,6 +66,7 @@ class Piw {
     self.onCallAccepted = options.onCallAccepted;
     self.onOfferCreation = options.onOfferCreation;
     self.onCallEnded = options.onCallEnded;
+    self.onCallRefused = options.onCallRefused;
   }
 
   processOffer(desc) {
@@ -113,7 +114,7 @@ class Piw {
           this.onCallRequest();
         }
       } else if (data === "__Piw__.call.refuse") {
-
+        this.onCallRefused();
       } else if (data === "__Piw__.call.ended") {
         this.closeCall();
         this.onCallEnded();

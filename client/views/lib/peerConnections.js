@@ -34,6 +34,9 @@ const peerConnectionHandler = {
       onCallRequest() {
         self.onCallRequest(userId);
       },
+      onCallRefused() {
+        self.onCallRefused(userId);
+      },
       onCallAccepted() {
         self.onCallAccepted(userId);
       },

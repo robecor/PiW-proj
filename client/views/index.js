@@ -124,9 +124,16 @@ wsConnection.onopen = function (event) {
     DomManipulator.showModal();
   };
 
+  peerConnectionHandler.onCallRefused = function (userId) {
+    DomManipulator.hideModal();
+    DomManipulator.hideUserCalling();
+
+    callingUserId = null;
+  };
+
   peerConnectionHandler.onCallAccepted = function (userId) {
+    DomManipulator.hideUserCalling();
     DomManipulator.showVideoModal();
-    DomManipulator.showModal();
   };
 
   peerConnectionHandler.onCallEnded = function (userId) {
@@ -186,6 +193,8 @@ DomEvents.onFileUpload(function (file) {
 });
 
 DomEvents.onVideoStartClick(function () {
+  DomManipulator.showUserCalling();
+  DomManipulator.showModal();
   peerConnectionHandler.callUser(selectedUserId);
   callingUserId = selectedUserId;
 });

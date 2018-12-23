@@ -19,6 +19,7 @@ const videoCloseButton = document.getElementById("video-close");
 const confirmationText = document.getElementById("confirmation-text");
 const videoStartButton = document.getElementById("video-start-button");
 const videoElement = document.getElementById("video-element");
+const userCalling = document.getElementById("user-calling");
 
 const messageListElements = {};
 const userElements = [];
@@ -254,7 +255,11 @@ class DomManipulator {
     videoModal.classList.add("hidden");
   }
 
-  static changeConfirmationText(text) {
-    confirmationText.innerHTML = text;
+  static showUserCalling() {
+    userCalling.classList.remove("hidden");
+  }
+
+  static hideUserCalling() {
+    userCalling.classList.add("hidden");
   }
 }

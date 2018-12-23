@@ -615,6 +615,21 @@
     transform: scale(1.2, 1.2);
 }
 
+.user-calling-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-calling-modal.hidden {
+    display: none;
+}
+
+.user-calling-text {
+    text-align: center;
+    font-size: 24px;
+}
+
 @keyframes loading-animation {
     0% {
         transform: rotate(0deg);
