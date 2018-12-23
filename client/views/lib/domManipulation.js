@@ -10,6 +10,13 @@ const messageListCont = document.getElementById("user-message-container");
 const messageList = document.getElementById("message-list");
 const chatInputForm = document.getElementById("chat-message-form");
 const fileInput = document.getElementById("file-input");
+const modalContainer = document.getElementById("modal-container");
+const confirmationModal = document.getElementById("confirmation-modal");
+const videoModal = document.getElementById("video-modal");
+const refuseButton = document.getElementById("confirmation-refuse");
+const acceptButton = document.getElementById("confirmation-accept");
+const videoCloseButton = document.getElementById("video-close");
+const confirmationText = document.getElementById("confirmation-text");
 
 const messageListElements = {};
 const userElements = [];
@@ -219,5 +226,33 @@ class DomManipulator {
 
   static clearFileField() {
     fileInput.value = "";
+  }
+
+  static showModal() {
+    modalContainer.classList.remove("hidden");
+  }
+
+  static hideModal() {
+    modalContainer.classList.add("hidden");
+  }
+
+  static showConfirmationModal() {
+    confirmationModal.classList.remove("hidden");
+  }
+
+  static hideConfirmationModal() {
+    confirmationModal.classList.add("hidden");
+  }
+
+  static showVideoModal() {
+    videoModal.classList.remove("hidden");
+  }
+
+  static hideVideoModal() {
+    videoModal.classList.add("hidden");
+  }
+
+  static changeConfirmationText(text) {
+    confirmationText.innerHTML = text;
   }
 }

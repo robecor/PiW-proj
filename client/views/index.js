@@ -150,3 +150,15 @@ DomEvents.onFileUpload(function (file) {
   DomManipulator.clearFileField();
   DomManipulator.addFileToChat(file, new Date(), true, selectedUserId, true);
 });
+
+DomEvents.onRefuseClick(function () {
+
+});
+
+DomEvents.onAcceptClick(function () {
+
+});
+
+DomEvents.onVideoCloseClick(function () {
+
+});
