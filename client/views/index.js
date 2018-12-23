@@ -2,6 +2,7 @@
 const wsConnection = new WebSocket("ws://192.168.1.72:3005");
 let wsOpen = false;
 let selectedUserId = null;
+let callingUserId = null;
 
 //Event for when the connection is open
 wsConnection.onopen = function (event) {
@@ -113,6 +114,7 @@ wsConnection.onopen = function (event) {
   };
 
   peerConnectionHandler.onCallRequest = function (userId) {
+    callingUserId = userId;
     DomManipulator.showConfirmationModal();
     DomManipulator.showModal();
   };
@@ -123,6 +125,7 @@ wsConnection.onopen = function (event) {
   };
 
   peerConnectionHandler.onCallEnded = function (userId) {
+    callingUserId = null;
     DomManipulator.hideModal();
     DomManipulator.hideVideoModal();
   };
@@ -179,22 +182,25 @@ DomEvents.onFileUpload(function (file) {
 
 DomEvents.onVideoStartClick(function () {
   peerConnectionHandler.callUser(selectedUserId);
+  callingUserId = selectedUserId;
 });
 
 DomEvents.onRefuseClick(function () {
-  peerConnectionHandler.refuseCall(selectedUserId);
+  peerConnectionHandler.refuseCall(callingUserId);
   DomManipulator.hideModal();
   DomManipulator.hideConfirmationModal();
+  callingUserId = null;
 });
 
 DomEvents.onAcceptClick(function () {
-  peerConnectionHandler.acceptCall(selectedUserId);
+  peerConnectionHandler.acceptCall(callingUserId);
   DomManipulator.hideConfirmationModal();
   DomManipulator.showVideoModal();
 });
 
 DomEvents.onVideoCloseClick(function () {
-  peerConnectionHandler.stopUserCall(selectedUserId);
+  peerConnectionHandler.stopUserCall(callingUserId);
   DomManipulator.hideModal();
   DomManipulator.hideVideoModal();
+  callingUserId = null;
 });

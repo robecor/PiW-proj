@@ -7,6 +7,7 @@ class Piw {
     this.isConnected = false;
     this.fileBuffer = [];
     this.startedCall = false;
+    this.offerCreator = !!options.createOffer;
 
     this.peerServerConfig = {
       iceServers: [
@@ -224,7 +225,7 @@ class Piw {
   negotationNeeded() {
     const self = this;
 
-    if (this.startedCall) {
+    if (this.offerCreator) {
       this.peerConnection.createOffer(
         {
           mandatory: {
