@@ -72,6 +72,30 @@
       </div>
     </div>
   </div>
+  <div class="modal-cont hidden" id="modal-container">
+    <div class="modal">
+      <div class="confirm-modal hidden" id="confirmation-modal">
+        <div class="confirm-modal-text" id="confirmation-text">
+          User is calling...
+        </div>
+        <div class="confirm-buttons">
+          <button class="refuse-button" id="confirmation-refuse">Refuse</button>
+          <button class="accept-button" id="confirmation-accept">Accept</button>
+        </div>
+      </div>
+      <div class="user-calling-modal hidden" id="user-calling">
+        <div class="user-calling-text">
+          Calling user...
+        </div>
+      </div>
+      <div class="video-modal hidden" id="video-modal">
+        <video class="video-element" id="video-element" autoplay></video>
+        <div class="video-buttons">
+          <button class="close-button" id="video-close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <script src="./lib/domManipulation.js"></script>
 <script src="./lib/messageParser.js"></script>

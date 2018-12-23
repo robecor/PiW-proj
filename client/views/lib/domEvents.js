@@ -5,6 +5,14 @@ const DomEvents = {
   },
   onFileUploadCallback: function () {
   },
+  onRefuseClickCallback: function () {
+  },
+  onAcceptClickCallback: function () {
+  },
+  onVideoCloseClickCallback: function () {
+  },
+  onVideoStartButtonClickCallback: function () {
+  },
 
   onUserClick(callback) {
     if (callback && typeof callback === "function") {
@@ -21,6 +29,30 @@ const DomEvents = {
   onFileUpload(callback) {
     if (callback && typeof callback === "function") {
       this.onFileUploadCallback = callback;
+    }
+  },
+
+  onRefuseClick(callback) {
+    if (callback && typeof callback === "function") {
+      this.onRefuseClickCallback = callback;
+    }
+  },
+
+  onAcceptClick(callback) {
+    if (callback && typeof callback === "function") {
+      this.onAcceptClickCallback = callback;
+    }
+  },
+
+  onVideoCloseClick(callback) {
+    if (callback && typeof callback === "function") {
+      this.onVideoCloseClickCallback = callback;
+    }
+  },
+
+  onVideoStartClick(callback) {
+    if (callback && typeof callback === "function") {
+      this.onVideoStartButtonClickCallback = callback;
     }
   }
 };
@@ -42,4 +74,20 @@ fileInput.addEventListener("change", function (event) {
   if (file) {
     DomEvents.onFileUploadCallback(file);
   }
+});
+
+refuseButton.addEventListener("click", function (event) {
+  DomEvents.onRefuseClickCallback();
+});
+
+acceptButton.addEventListener("click", function (event) {
+  DomEvents.onAcceptClickCallback();
+});
+
+videoCloseButton.addEventListener("click", function (event) {
+  DomEvents.onVideoCloseClickCallback();
+});
+
+videoStartButton.addEventListener("click", function (event) {
+  DomEvents.onVideoStartButtonClickCallback();
 });

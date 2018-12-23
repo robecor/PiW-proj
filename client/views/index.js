@@ -1,7 +1,8 @@
 //The websocket connection
-const wsConnection = new WebSocket("ws://127.0.0.1:3005");
+const wsConnection = new WebSocket("ws://192.168.1.72:3005");
 let wsOpen = false;
 let selectedUserId = null;
+let callingUserId = null;
 
 //Event for when the connection is open
 wsConnection.onopen = function (event) {
@@ -31,11 +32,21 @@ wsConnection.onopen = function (event) {
         DomManipulator.showWaitingBox();
         break;
       case "user.sdpOffer":
-        const newConnection = peerConnectionHandler.createNewConnection({
-          userId: messageObject.data.userId,
-          description: messageObject.data.description,
-          createOffer: false
-        });
+        const existingConnection = peerConnectionHandler.getUserConnection(messageObject.data.userId);
+
+        if (existingConnection) {
+          peerConnectionHandler.processUserOffer({
+            userId: messageObject.data.userId,
+            description: messageObject.data.description
+          });
+        } else {
+          const newConnection = peerConnectionHandler.createNewConnection({
+            userId: messageObject.data.userId,
+            description: messageObject.data.description,
+            createOffer: false,
+            videoElement
+          });
+        }
         break;
       case "user.sdpAnswer":
         peerConnectionHandler.processUserAnswer({
@@ -101,6 +112,35 @@ wsConnection.onopen = function (event) {
       DomManipulator.showUserUnread(userId);
     }
   };
+
+  peerConnectionHandler.onCallRequest = function (userId) {
+    if (callingUserId) {
+      peerConnectionHandler.refuseCall(userId);
+      return;
+    }
+
+    callingUserId = userId;
+    DomManipulator.showConfirmationModal();
+    DomManipulator.showModal();
+  };
+
+  peerConnectionHandler.onCallRefused = function (userId) {
+    DomManipulator.hideModal();
+    DomManipulator.hideUserCalling();
+
+    callingUserId = null;
+  };
+
+  peerConnectionHandler.onCallAccepted = function (userId) {
+    DomManipulator.hideUserCalling();
+    DomManipulator.showVideoModal();
+  };
+
+  peerConnectionHandler.onCallEnded = function (userId) {
+    callingUserId = null;
+    DomManipulator.hideModal();
+    DomManipulator.hideVideoModal();
+  };
 };
 
 //Function for the name set form
@@ -126,7 +166,8 @@ DomEvents.onUserClick(function (userId) {
 
   const newConnection = peerConnectionHandler.createNewConnection({
     userId: userId,
-    createOffer: true
+    createOffer: true,
+    videoElement
   });
 
   if (selectedUserId !== userId) {
@@ -149,4 +190,31 @@ DomEvents.onFileUpload(function (file) {
   peerConnectionHandler.userSendFile(selectedUserId, file);
   DomManipulator.clearFileField();
   DomManipulator.addFileToChat(file, new Date(), true, selectedUserId, true);
+});
+
+DomEvents.onVideoStartClick(function () {
+  DomManipulator.showUserCalling();
+  DomManipulator.showModal();
+  peerConnectionHandler.callUser(selectedUserId);
+  callingUserId = selectedUserId;
+});
+
+DomEvents.onRefuseClick(function () {
+  peerConnectionHandler.refuseCall(callingUserId);
+  DomManipulator.hideModal();
+  DomManipulator.hideConfirmationModal();
+  callingUserId = null;
+});
+
+DomEvents.onAcceptClick(function () {
+  peerConnectionHandler.acceptCall(callingUserId);
+  DomManipulator.hideConfirmationModal();
+  DomManipulator.showVideoModal();
+});
+
+DomEvents.onVideoCloseClick(function () {
+  peerConnectionHandler.stopUserCall(callingUserId);
+  DomManipulator.hideModal();
+  DomManipulator.hideVideoModal();
+  callingUserId = null;
 });
