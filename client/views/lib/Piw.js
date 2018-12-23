@@ -2,6 +2,7 @@ class Piw {
   constructor(options) {
     const self = this;
     this.userId = options.userId;
+    this.videoElement = options.videoElement;
     this.isConnecting = false;
     this.isConnected = false;
     this.fileBuffer = [];
@@ -62,6 +63,7 @@ class Piw {
     self.onCallRequest = options.onCallRequest;
     self.onCallAccepted = options.onCallAccepted;
     self.onOfferCreation = options.onOfferCreation;
+    self.onCallEnded = options.onCallEnded;
   }
 
   processOffer(desc) {
@@ -106,6 +108,9 @@ class Piw {
         this.onCallRequest();
       } else if (data === "__Piw__.call.refuse") {
 
+      } else if (data === "__Piw__.call.ended") {
+        this.closeCall();
+        this.onCallEnded();
       } else if (data === "__Piw__.call.accept") {
         this.startMediaAndSend();
         this.onCallAccepted();
@@ -209,7 +214,11 @@ class Piw {
   }
 
   onNewTrack(event) {
-    videoElement.srcObject = event.streams[0];
+    this.remoteStream = event.streams[0];
+
+    if (this.videoElement) {
+      this.videoElement.srcObject = this.remoteStream;
+    }
   }
 
   negotationNeeded() {
@@ -231,6 +240,24 @@ class Piw {
       }).catch((err) => {
         console.log(err);
       });
+    }
+  }
+
+  closeCall() {
+    if (this.localStream) {
+      this.localStream.getTracks().forEach(track => {
+        track.stop();
+      });
+
+      this.localStream = null;
+
+      if (this.videoElement) {
+        this.videoElement.srcObject = null;
+      }
+
+      if (this.dataChannel) {
+        this.dataChannel.send("__Piw__.call.ended");
+      }
     }
   }
 }

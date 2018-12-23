@@ -1,7 +1,7 @@
 const userConnections = [];
 
 const peerConnectionHandler = {
-  createNewConnection({userId, description, createOffer}) {
+  createNewConnection({userId, description, createOffer, videoElement}) {
     const self = this;
     const existingConnection = this.getUserConnection(userId);
 
@@ -12,6 +12,7 @@ const peerConnectionHandler = {
     const peerConnection = new Piw({
       userId,
       createOffer,
+      videoElement,
       onIceCandidate(candidate) {
         self.onIceCandidate(userId, candidate);
       },
@@ -35,6 +36,9 @@ const peerConnectionHandler = {
       },
       onCallAccepted() {
         self.onCallAccepted(userId);
+      },
+      onCallEnded() {
+        self.onCallEnded(userId);
       }
     });
 
@@ -139,6 +143,14 @@ const peerConnectionHandler = {
 
     if (connection) {
       connection.startMediaAndSend();
+    }
+  },
+
+  stopUserCall(userId) {
+    const connection = this.getUserConnection(userId);
+
+    if (connection) {
+      connection.closeCall();
     }
   },
 

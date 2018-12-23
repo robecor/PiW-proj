@@ -42,7 +42,8 @@ wsConnection.onopen = function (event) {
           const newConnection = peerConnectionHandler.createNewConnection({
             userId: messageObject.data.userId,
             description: messageObject.data.description,
-            createOffer: false
+            createOffer: false,
+            videoElement
           });
         }
         break;
@@ -120,6 +121,11 @@ wsConnection.onopen = function (event) {
     DomManipulator.showVideoModal();
     DomManipulator.showModal();
   };
+
+  peerConnectionHandler.onCallEnded = function (userId) {
+    DomManipulator.hideModal();
+    DomManipulator.hideVideoModal();
+  };
 };
 
 //Function for the name set form
@@ -145,7 +151,8 @@ DomEvents.onUserClick(function (userId) {
 
   const newConnection = peerConnectionHandler.createNewConnection({
     userId: userId,
-    createOffer: true
+    createOffer: true,
+    videoElement
   });
 
   if (selectedUserId !== userId) {
@@ -187,5 +194,7 @@ DomEvents.onAcceptClick(function () {
 });
 
 DomEvents.onVideoCloseClick(function () {
-
+  peerConnectionHandler.stopUserCall(selectedUserId);
+  DomManipulator.hideModal();
+  DomManipulator.hideVideoModal();
 });
