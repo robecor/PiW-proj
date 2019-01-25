@@ -1,5 +1,5 @@
 //The websocket connection
-const wsConnection = new WebSocket("ws://192.168.1.72:3005");
+const wsConnection = new WebSocket("ws://localhost:3005");
 let wsOpen = false;
 let selectedUserId = null;
 let callingUserId = null;

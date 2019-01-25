@@ -73,7 +73,7 @@
     <p>
       The only use for a server here was for client negotiation, necessary for the initial connection. After that the server could be stopped and the users could still share information.
       To showcase the framework I needed an idea of an app whose purpose was to connect users and let them transfer different types of data. That is how I came up with a simple chat web app where
-      you could send texts to each other, share files and even start a one on one video live session.
+      you could send texts to each other, share files and even start a one to one video live session.
     </p>
   </section>
 
@@ -84,7 +84,7 @@
       The app follows the SAP implementation, so there was only one main page that was served at the <code>/</code> route. Besides that there are also the documentation files that have their own routes.
     </p>
     <p>
-      Besides express I also used websockets, useful for the initial negotiation between clients as well as for keeping them up to date with who is online.
+      Besides express I also used Websockets, useful for the initial negotiation between clients as well as for keeping them up to date with who is online.
       The communication between the server and client is done using a stringified JSON format, that contains the action needed and the data parsed.
       The format looks something like this:
     </p>
@@ -117,7 +117,7 @@
       </pre>
     </figure>
     <p>
-      <code>action</code> tells the server that the user wants to set his/her name and the data objects contains the name. The server responds back using the same format.
+      <code>action: "user.setName"</code> tells the server that the user wants to set his/her name and the data objects contains the name. The server responds back using the same format.
     </p>
   </section>
 

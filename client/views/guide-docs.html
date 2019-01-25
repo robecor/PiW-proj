@@ -110,12 +110,12 @@
         <code>createOffer</code> will be set to <code>true</code> if User 1 is the one starting the connection. We will see later the case for when its set to <code>false</code>.
       </li>
       <li>
-        <code>videoElement</code> will be a video element from dome that the framework will use fir live video session.
+        <code>videoElement</code> will be a video element from DOM that the framework will use for live video session.
       </li>
     </ol>
     <p>
       Now the event will trigger and we will have the SDP offer as the callback second argument. Take that and send it to the peer we are trying to connect to, through an intermediate server.
-      When the other party (which for convenience will name User 2) we call the same <code>createNewConnection</code> but with slightly different argumets.
+      When the other party (which for convenience sake will name User 2) we call the same <code>createNewConnection</code> but with slightly different arguments.
     </p>
     <figure typeof="schema:SoftwareSourceCode">
       <pre>
@@ -203,7 +203,7 @@
     <h2>4. Messaging</h2>
     <p>
       Since the two peers are connected we can start sending messages. The data transfer is direct and it doesn't need a server.
-      To send a simple message as a string we can user the following method;
+      To send a simple message as a string we can user the following method:
     </p>
     <figure typeof="schema:SoftwareSourceCode">
       <pre>
@@ -234,7 +234,7 @@
     <h2>5. File transfer</h2>
     <p>
       Besides text messages we can also send files through the connection. This uses the same data channel as the one for messaging.
-      Send a file is as simple as sending a string.
+      Sending a file is as simple as sending a string.
     </p>
     <figure typeof="schema:SoftwareSourceCode">
       <pre>
@@ -264,7 +264,7 @@
     <h2>6. Video session</h2>
     <p>
       With the peer connection we can also send live video data, which we can use to make a video chat session.
-      For this and intermediate server will be needed again since starting a video chat requires another SDP negotiation.
+      For this an intermediate server will be needed again since starting a video chat requires another SDP negotiation.
     </p>
     <p>
       To call a user simply use the method.
@@ -277,15 +277,15 @@
       </pre>
     </figure>
     <p>
-      For the other peer be user to have the event set up for when someone is calling.
+      For the other user we need to have the event set up for when someone is calling.
     </p>
     <figure typeof="schema:SoftwareSourceCode">
       <pre>
         <code>
           peerConnectionHandler.onCallRequest = function (userId) {
-            peerConnectionHandler.acceptCall(callingUserId); //If you want to accept the call
+            peerConnectionHandler.acceptCall(userId); //If you want to accept the call
 
-            peerConnectionHandler.refuseCall(callingUserId); //If you want to refuse the call
+            peerConnectionHandler.refuseCall(userId); //If you want to refuse the call
           };
         </code>
       </pre>
@@ -299,7 +299,7 @@
       <pre>
         <code>
           peerConnectionHandler.onCallRefused = function (userId) {
-            ...
+            // Do something here
           };
         </code>
       </pre>
@@ -324,6 +324,9 @@
         </code>
       </pre>
     </figure>
+    <p>
+      This will close the data channel and the RtcPeerConnection.
+    </p>
   </section>
 </body>
 </html>
