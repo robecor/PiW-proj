@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Docs</title>
 </head>
@@ -34,7 +32,7 @@
       </ul>
     </section>
     <section>
-      <h1>Content</h1>
+      <h2>Content</h2>
       <ol role="directory">
         <li>
           <a href="#introduction-section">1. Introduction</a>
@@ -90,7 +88,7 @@
       The communication between the server and client is done using a stringified JSON format, that contains the action needed and the data parsed.
       The format looks something like this:
     </p>
-    <figure typeof="schema:SoftwareSourceCode" role="doc-example">
+    <figure typeof="schema:SoftwareSourceCode">
       <pre>
         <code>
           {
@@ -106,7 +104,7 @@
       The <code>action</code> field is used to determine what action the user wants to take and <code>data</code> will contain information data needed for that action.
       For example if the client wants to set a name for himself he will send the following JSON:
     </p>
-    <figure typeof="schema:SoftwareSourceCode" role="doc-example">
+    <figure typeof="schema:SoftwareSourceCode">
       <pre>
         <code>
           {
@@ -138,7 +136,7 @@
       In the next stage the server sends the list with the active users so that we can populate them in the list using the DOM manipulation service.
       The JSON message for that will look something like this:
     </p>
-    <figure typeof="schema:SoftwareSourceCode" role="doc-example">
+    <figure typeof="schema:SoftwareSourceCode">
       <pre>
         <code>
           {
