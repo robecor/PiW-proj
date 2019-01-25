@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Docs</title>
+</head>
+<body>
+  <header>
+    <h1>Developer guide</h1>
+  </header>
+
+  <div role="contentinfo">
+    <section typeof="sa:AuthorsList">
+      <h2>Authors</h2>
+      <ul>
+        <li typeof="sa:ContributorRole" property="schema:author">
+          <span typeof="schema:Person" resource="https://github.com/robecor">
+            <meta property="schema:givenName" content="Robert">
+            <meta property="schema:additionalName" content="Cozmin">
+            <meta property="schema:familyName" content="Corolea">
+            <span property="schema:name">Corolea Robert-Cozmin</span>
+          </span>
+          <ul>
+            <li property="schema:roleContactPoint" typeof="schema:ContactPoint">
+              <a href="mailto:robert.corolea@cultofcoders.com" property="schema:email">
+                robert.corolea@cultofcoders.com
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+    <section>
+      <h2>Content</h2>
+      <ol role="directory">
+        <li>
+          <a href="#introduction-section">1. Introduction</a>
+        </li>
+        <li>
+          <a href="#negotiation-section">2. SDP negotiation</a>
+        </li>
+        <li>
+          <a href="#candidate-section">3. ICE candidates</a>
+        </li>
+        <li>
+          <a href="#message-section">4. Messaging</a>
+        </li>
+        <li>
+          <a href="#file-section">5. File transfer</a>
+        </li>
+        <li>
+          <a href="#video-section">6. Video session</a>
+        </li>
+        <li>
+          <a href="#close-section">7. Closing connection</a>
+        </li>
+      </ol>
+    </section>
+  </div>
+
+  <section typeof="sa:Abstract" id="introduction-section" role="doc-introduction">
+    <h2>1. Introduction</h2>
+    <p>
+      This will serve as a helpful guide to using the peer-to-peer framework. I will go through the process of connecting to a peer and sending data.
+    </p>
+  </section>
+
+  <section id="negotiation-section">
+    <h2>2. SDP negotiation</h2>
+    <p>
+      The first step is the SDP information negotiation between peers. In this stage we will need an intermediate server since the clients have not discovered themselves.
+    </p>
+    <p>
+      Before we start generating the SDP we need to set up the event for that.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.onSdpOffer = function (userId, description) {
+            //Send description to the other client with the id
+          };
+        </code>
+      </pre>
+    </figure>
+    <p>
+      This event will be fired when the internal <code>RtcPeerConnection</code> generates the SDP offer.
+      Once the event is secured we can go ahead and create a connection, which wil generate an offer. For simplicity sake we will call the first user, the one who creates the initial connection
+      User 1.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.createNewConnection({
+            userId: userId,
+            createOffer: true,
+            videoElement
+          });
+        </code>
+      </pre>
+    </figure>
+    <p>
+      In this case we provide 3 arguments:
+    </p>
+    <ol>
+      <li>
+        <code>userId</code> so that we can keep track of the client we try to connect to. This is useful because we can have multiple connections.
+      </li>
+      <li>
+        <code>createOffer</code> will be set to <code>true</code> if User 1 is the one starting the connection. We will see later the case for when its set to <code>false</code>.
+      </li>
+      <li>
+        <code>videoElement</code> will be a video element from dome that the framework will use fir live video session.
+      </li>
+    </ol>
+    <p>
+      Now the event will trigger and we will have the SDP offer as the callback second argument. Take that and send it to the peer we are trying to connect to, through an intermediate server.
+      When the other party (which for convenience will name User 2) we call the same <code>createNewConnection</code> but with slightly different argumets.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.createNewConnection({
+            userId: userId,
+            description: description,
+            createOffer: false,
+            videoElement
+          });
+        </code>
+      </pre>
+    </figure>
+    <p>
+      As you can see thing are a little bit different. This time we pass a <code>description</code> argument, which is the SDP offer generate by User 1 and the <code>createOffer</code>
+      is set to false, since this time we won't need to generate an offer.
+    </p>
+    <p>
+      At this stage the event for an SDP answer should fire. And important thing to note is that we should set the event before we create the connection, just like with User 1.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.onSdpAnswer = function (userId, description) {
+            // Send description to User 1
+          };
+        </code>
+      </pre>
+    </figure>
+    <p>
+      Now that we have the answer we should send that through the server back at the first peer, where we process it.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.processUserAnswer({
+            userId: userId,
+            description: description
+          });
+        </code>
+      </pre>
+    </figure>
+    <p>
+      This is the last step for the SDP negotiation.
+    </p>
+  </section>
+
+  <section id="candidate-section">
+    <h2>3. ICE candidates</h2>
+    <p>
+      The other phase of the peer discovery is the ICE candidates exchange. Each peer will generate ICE candidates, which the other user adds to the peer connection.
+      For this step we still need an intermediate server since the connection is not established yet.
+    </p>
+    <p>
+      First we set up the event for when a candidate is generated.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.onIceCandidate = function (userId, candidate) {
+            // Send the candidate to the other user
+          };
+        </code>
+      </pre>
+    </figure>
+    <p>
+      Second, when we receive a candidate from the other user, process it.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.processUserCandidate({
+            userId: userId,
+            candidate: candidate
+          });
+        </code>
+      </pre>
+    </figure>
+    <p>
+      At this stage the connection between peers is established and we won't be using the server anymore.
+    </p>
+  </section>
+
+  <section id="message-section">
+    <h2>4. Messaging</h2>
+    <p>
+      Since the two peers are connected we can start sending messages. The data transfer is direct and it doesn't need a server.
+      To send a simple message as a string we can user the following method;
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.userSendMessage(userId, text);
+        </code>
+      </pre>
+    </figure>
+    <p>
+      This will send a message through a data channel to the other user(specified by <code>userId</code>).
+      In order to receive it we will need to set up an event.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.onDataMessage = function (userId, message) {
+            // Show the message in a chat box
+          };
+        </code>
+      </pre>
+    </figure>
+    <p>
+      As you can see the event callback will have as arguments the id of the user and the message sent.
+    </p>
+  </section>
+
+  <section id="file-section">
+    <h2>5. File transfer</h2>
+    <p>
+      Besides text messages we can also send files through the connection. This uses the same data channel as the one for messaging.
+      Send a file is as simple as sending a string.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.userSendFile(userId, file);
+        </code>
+      </pre>
+    </figure>
+    <p>
+      To receive the file we just set up the event for it.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.onDataFile = function (userId, file) {
+            // Create a link for the file to download it
+          };
+        </code>
+      </pre>
+    </figure>
+    <p>
+      Keep in mind that files are sent in chunks so for larger ones it may take a while until the user receives it.
+    </p>
+  </section>
+
+  <section id="video-section">
+    <h2>6. Video session</h2>
+    <p>
+      With the peer connection we can also send live video data, which we can use to make a video chat session.
+      For this and intermediate server will be needed again since starting a video chat requires another SDP negotiation.
+    </p>
+    <p>
+      To call a user simply use the method.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.callUser(selectedUserId);
+        </code>
+      </pre>
+    </figure>
+    <p>
+      For the other peer be user to have the event set up for when someone is calling.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.onCallRequest = function (userId) {
+            peerConnectionHandler.acceptCall(callingUserId); //If you want to accept the call
+
+            peerConnectionHandler.refuseCall(callingUserId); //If you want to refuse the call
+          };
+        </code>
+      </pre>
+    </figure>
+    <p>
+      As you can see we have two options for when a peer is calling for a video session.
+      Calling the <code>refuseCall</code> will refuse the call and trigger an event on the other side notifying the caller that he was refused.
+      That event looks like this.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.onCallRefused = function (userId) {
+            ...
+          };
+        </code>
+      </pre>
+    </figure>
+    <p>
+      On the other hand calling the <code>acceptCall</code> method with initiate the video call using the video element provided in the <code>createNewConnection</code> method.
+    </p>
+    <p>
+      Any time you want during the video session you can stop it with the <code>peerConnectionHandler.stopUserCall(userId)</code> method.
+    </p>
+  </section>
+  <section id="close-section">
+    <h2>7. Closing a connection</h2>
+
+    <p>
+      You can close a connection with a user by calling the specified method.
+    </p>
+    <figure typeof="schema:SoftwareSourceCode">
+      <pre>
+        <code>
+          peerConnectionHandler.closeUserConnection(userId);
+        </code>
+      </pre>
+    </figure>
+  </section>
+</body>
+</html>

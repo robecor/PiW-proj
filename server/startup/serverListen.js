@@ -43,6 +43,13 @@ app.get("/progress-docs", function (req, res) {
 
   res.sendFile(path.join(`${viewPath}/progress-docs.html`));
 });
+app.get("/guide-docs", function (req, res) {
+  res.set({
+    'Content-Type': 'text/html'
+  });
+
+  res.sendFile(path.join(`${viewPath}/guide-docs.html`));
+});
 app.get("/uml-docs.xml", function (req, res) {
   res.set({
     'Content-Type': 'text/xml'
