@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Docs</title>
 </head>
@@ -34,7 +32,7 @@
       </ul>
     </section>
     <section>
-      <h1>Content</h1>
+      <h2>Content</h2>
       <ol role="directory">
         <li>
           <a href="#introduction-section">1. Introduction</a>
@@ -52,10 +50,7 @@
           <a href="#framework-section">5. Framework implementation</a>
         </li>
         <li>
-          <a href="#testing-section">6. Testing</a>
-        </li>
-        <li>
-          <a href="#practic-section">7. Practical applications</a>
+          <a href="#practic-section">6. Practical applications</a>
         </li>
       </ol>
     </section>
@@ -64,7 +59,7 @@
   <section typeof="sa:Abstract" id="introduction-section" role="doc-introduction">
     <h2>1. Introduction</h2>
     <p>
-      In this document I will present the evolution of the project development, as well as steps taken for testing.
+      In this document I will present the evolution of the project development.
       I will also showcase some practical applications for the project.
     </p>
   </section>
@@ -93,7 +88,7 @@
       The communication between the server and client is done using a stringified JSON format, that contains the action needed and the data parsed.
       The format looks something like this:
     </p>
-    <figure typeof="schema:SoftwareSourceCode" role="doc-example">
+    <figure typeof="schema:SoftwareSourceCode">
       <pre>
         <code>
           {
@@ -109,7 +104,7 @@
       The <code>action</code> field is used to determine what action the user wants to take and <code>data</code> will contain information data needed for that action.
       For example if the client wants to set a name for himself he will send the following JSON:
     </p>
-    <figure typeof="schema:SoftwareSourceCode" role="doc-example">
+    <figure typeof="schema:SoftwareSourceCode">
       <pre>
         <code>
           {
@@ -141,7 +136,7 @@
       In the next stage the server sends the list with the active users so that we can populate them in the list using the DOM manipulation service.
       The JSON message for that will look something like this:
     </p>
-    <figure typeof="schema:SoftwareSourceCode" role="doc-example">
+    <figure typeof="schema:SoftwareSourceCode">
       <pre>
         <code>
           {
@@ -192,19 +187,8 @@
     </p>
   </section>
 
-  <section id="testing-section">
-    <h2>6. Testing</h2>
-    <p>
-      For testing purpose I've used the Chrome and Firefox browsers on a Linux platform.
-      Unit testing was done on the framework and each service, responsible for DOM manipulation, event handlers.
-    </p>
-    <p>
-      Bugs were documented and then fixed in sequential steps.
-    </p>
-  </section>
-
   <section id="practic-section">
-    <h2>7. Practical applications</h2>
+    <h2>6. Practical applications</h2>
     <p>
       The application has practical uses for information exchange, such as chat rooms, hubs, etc.
       The peer-to-peer connection is useful for file transfers between clients with out the need for a server.
